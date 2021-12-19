@@ -59,32 +59,3 @@ test('output should be stringified json if format is json', (assert) => {
     ]], 'stdout should be called once with expected data');
 
 });
-
-test('output should be colorized human readable output if format is human', (assert) => {
-
-    // given
-    const stubs = {
-        stderr: stub(),
-        stdout: stub(),
-    };
-    const opts = {
-        level: ErrorLevel.fatal,
-        format: LogFormat.human,
-        verbosity: LogVerbosity.terse,
-    };
-    const m: typeof outputModule = mock('./output', {
-        './transports': {transports: {stderr: stubs.stderr, stdout: stubs.stdout}},
-    });
-
-    // when
-    m.output({level: ErrorLevel.trace, message: 'fake message', data: {fake: 'data'}}, opts);
-
-    // then
-    assert.equal(stubs.stdout.args, [[
-        '\n'
-        + 'Level: \x1B[1m\x1B[90mTRACE\x1B[22m\x1B[39m\n'
-        + 'Message: fake message\n'
-        + '{ fake: \x1B[32m\'data\'\x1B[39m }\n',
-    ]], 'stdout should be called once with expected data');
-
-});
