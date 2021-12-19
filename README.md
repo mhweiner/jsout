@@ -25,13 +25,13 @@ A crazy-small, crazy-simple logger for Typescript & Javascript projects. Does ev
 - Easily set configuration using simple CLI overrides
 - Simple and well-defined enough to build custom tooling around, such as custom error handling and logging pipelines.
 
-# Installation
+## Installation
 
 ```bash
 npm i jsout -D
 ```
  
-# Example Usage
+## Example Usage
 
 ```typescript
 import {logger} from 'jsout';
@@ -42,7 +42,7 @@ logger.error('', new Error('test')); //infers "test" as message
 
 ```
 
-# Configuration
+## Configuration
 
 Configuration is set through the CLI environment variables (aka `process.env` variables in node.js). For example, here is a recommended setup for local development:
 
@@ -83,22 +83,52 @@ If verbose, extra metadata is appended to `log.context`. Example:
 
 **Default**: `"verbose"` (recommended for production)
 
+## API
 
+For all of the following, please note:
 
-# Contribution
+- `error` should be an actual error with stack traces. This is not enforced is usually best practice.
+- `context` should by any information not necessarily directly related to the error, ie. server request information, app component, configurations, etc. This is where the [verbose metadata](#processenvlog_verbosity) is appended (this will override anything in the context object).
+- `data` any object that might be useful to debug the error, or any pertinant information relating to the log message
+
+### `logger.trace(message?: string, data?: any, context?: any)`
+
+Emits a log to `stdout` with a level of `TRACE (10)`
+
+### `logger.debug(message?: string, data?: any, context?: any)`
+
+Emits a log to `stdout` with a level of `DEBUG (20)`
+
+### `logger.info(message?: string, data?: any, context?: any)`
+
+Emits a log to `stdout` with a level of `INFO (30)`
+
+### `logger.warn(message?: string, error?: any, data?: any, context?: any)`
+
+Emits a log to `stderr` with a level of `WARN (40)`
+
+### `logger.error(message?: string, error?: any, data?: any, context?: any)`
+
+Emits a log to `stderr` with a level of `ERROR (50)`
+
+### `logger.fatal(message?: string, error?: any, data?: any, context?: any)`
+
+Emits a log to `stderr` with a level of `FATAL (60)`
+
+## Contribution
 
 Please contribute to this project! Issue a PR against `master` and request review. 
 
 - Please test your work thoroughly.
 - Make sure all tests pass with appropriate coverage.
 
-## How to build locally
+### How to build locally
 
 ```bash
 npm i
 ```
 
-## Running tests
+### Running tests
 
 ```shell script
 npm test
