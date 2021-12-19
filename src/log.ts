@@ -1,5 +1,6 @@
 import {ErrorLevel, Log, LogVerbosity, Options} from '.';
 import {output} from './output';
+import {metadata} from './metadata';
 
 function getErrorMessage(error: any) {
 
@@ -34,10 +35,7 @@ export function log(input: {
 
         log.context = {
             ...context,
-            date: new Date().toISOString(),
-            pid: process.pid,
-            ppid: process.ppid,
-            nodeVersion: process.version,
+            ...metadata(),
         };
 
     }

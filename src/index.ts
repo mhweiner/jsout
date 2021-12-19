@@ -33,7 +33,7 @@ export enum LogVerbosity {
 
 export type Log = {
     level: ErrorLevel
-    message: string
+    message?: string
     error?: {}
     data?: {}
     context?: {}

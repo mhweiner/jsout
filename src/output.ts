@@ -2,10 +2,11 @@ import kleur from 'kleur';
 import util from 'util';
 import {serializeError} from 'serialize-error';
 import {ErrorLevel, Log, LogFormat, Options} from '.';
+import {transports} from './transports';
 
 export function output(log: Log, options: Options) {
 
-    const transport = log.level >= ErrorLevel.warn ? console.error : console.log;
+    const transport = log.level >= ErrorLevel.warn ? transports.stderr : transports.stdout;
 
     options.format === LogFormat.json ? transport(stringify(log)) : transport(humanFormat(log));
 

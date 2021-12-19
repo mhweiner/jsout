@@ -5,27 +5,25 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 
-A small, yet powerful typed and structured config library with lambda support for things like AWS Secrets Manager. Written in Typescript.
+A crazy-small, crazy-simple logger for Typescript & Javascript projects. Does everything you need, nothing you don't.
 
-**Out-of-the-box Typescript support 🔒**
-- Turn your runtime errors into safer compile-time errors! Automatically generated Typescript type definition for configuration object
+**Structured Logs 🔒**
+- Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
 
-**Lambda Support 🤖**
-- Works with AWS Secrets Manager, AWS Parameter Store, or custom dynamic lambda functions
-- Any custom logic can go here, keeping your config files logic-free
-- Provides an easy sharable and reusable plugin interface for sharing or re-use
+**Defensive & Devops Friendly 🛡**
+- Logs are enabled in production mode by default
+- Doesn't allow for fancy configurations that are easy to get wrong. Logging should be easy and simple.
+- Transport should be handled outside of the process, not inside (this is the job of DevOps)
+- Configuration should also be handled outside of the code, not inside. This is also the job of DevOps.
 
 **Crazy Simple & Easy to Use 😃**
-- All settings are in simple `.json` files. No logic (those can go into loaders)
-- Highly structured. Any override must satisfy `Partial<DefaultConfig>`
-- Enforces a simple and sensible folder structure
-- Limited yet powerful feature set with clean documentation
-- Small, simple, and modular codebase written in Typescript with only 2 small dependencies.
+- Out-of-the-box Typescript support
+- Only 2 tiny dependencies, written in clean Typescript
+- Nice human readable output
 
 **Flexible & Powerful 💪**
-- Provides for overrides via CLI without polluting the CLI argument namespace
-- Differentiates between concepts such as `environment`, `deployment`, and `user` and provides an out-of-the-box
-  solution with sensible merge strategy
+- Easily set configuration using simple CLI overrides
+- Simple and well-defined enough to build custom tooling around, such as custom error handling and logging pipelines.
 
 # Installation
 
@@ -33,139 +31,57 @@ A small, yet powerful typed and structured config library with lambda support fo
 npm i jsout -D
 ```
  
-# Usage
-
-_First, make sure you have already done everything in Setup above!_
-
-## Loading the Configuration
-
-You must first *load* the config, which resolves any `loaders` and performs the merge.
+# Example Usage
 
 ```typescript
-import {loadConf, getConf} from "lambdaconf";
+import {logger} from 'jsout';
 
-loadConf().then(() => {
+logger.info('test message');
+logger.fatal('oops!', new Error(), {foo: 'bar'})
+logger.error('', new Error('test')); //infers "test" as message
 
-    //start server, etc.
-    console.log(getConf()); // outputs config object
-
-}).catch(console.log.bind(console));
 ```
 
-## Getting the Config Object
+# Configuration
 
-Once loaded, use `getConf` to access:
+Configuration is set through the CLI environment variables (aka `process.env` variables in node.js). For example, here is a recommended setup for local development:
 
-```typescript
-import {getConf} from "lambdaconf";
-
-const conf = getConf(); // type of Conf is inferred
-
-console.log(conf); // logs config object
-
-const isFooBarEnabled: boolean = conf.foo.bar; // Typescript error if does not exist or type mismatch
+```bash
+LOG=debug LOG_FORMAT=human LOG_VERBOSITY=terse node /path/to/yourApp.js
 ```
 
-If you need the type interface, you can import it:
+### `process.env.LOG`
 
-```typescript
-import {Conf} from "lambdaconf";
-```
+Sets the log level. Any logs lower than this log level are ignored.
 
-## Configuration, Overrides, and Merge Strategy
+**Possible values**: `"trace"`, `"debug"`, `"info"`, `"warn"`, `"error"`, `"fatal"`
 
-Configurations are merged in this order, with the later ones overriding the earlier ones:
- 
-1. default.json
-2. environment file
-3. deployment file
-4. user file
-5. CLI overrides
+**Default**: `"info"` (recommended for production)
 
-Which of these sources to choose depends on the presence of certain `process.env` configuration variables:
+### `process.env.LOG_FORMAT`
 
-| **process.env**     | **conf file**                         |
-| ------------------- | --------------------------------------|
-| `NODE_ENV`          | `/conf/environments/[NODE_ENV].json`  |
-| `DEPLOYMENT`        | `/conf/deployments/[DEPLOYMENT].json` |
-| `USER`              | `/conf/users/[USER].json`             |
-| `OVERRIDE`          | N/A                                   |
+Set the format for the output to either be human-readable (great for local development in the console), or JSON formatted (great for data aggregation on a server).
 
-A few notes:
+**Possible values**: `"human"`, `"json"`
 
-- `OVERRIDE` must be a valid JSON string with escaped quotes. Example:
+**Default**: `"json"` (recommended for production)
 
-```shell script
-NODE_ENV=development OVERRIDE="{\"a\": {\"b\": \"q\"}}" ts-node src/index.ts
-```
+### `process.env.LOG_VERBOSITY`
 
-- `USER` is usually provided by default by UNIX environments (try `console.log(process.env.USER)`)
-- `loaders` parameters are not merged. A `loader` instance is treated as a primitive. 
-- Arrays are not merged
+If verbose, extra metadata is appended to `log.context`. Example:
 
-## Loaders
-
-Loaders are lambda functions that are called during startup (run-time). A great example of this is fetching API keys from AWS Secrets Manager.
-
-Loaders are run once during the type declaration build step (compile-time), and once while the configuration is loading (run-time). They can be normal functions or use async/await/Promise.
-
-### Loader "foo" Example
-
-_loaders/foo.ts_
-```typescript
-export function foo(params: {a: string}) {
-    return Promise.resolve(`foo_${a}`);
-}
-```
-
-_conf/default.json_
 ```json
 {
-  "foo": {
-    "[foo]": {
-      "a": "demo"
-    }   
-  }
-}
-```
-_index.ts_
-
-```typescript
-import {loadConfig, getConf} from "lambdaconf";
-import {foo} from './loaders/foo';
-
-const loaders = [{foo}];
-
-loadConfig(loaders)
-        .then(() => {
-           
-           console.log(getConf().foo); // "foo_demo"
-
-           //start server, etc.
-
-        })
-        .catch(console.log.bind(console));
-```
-
-To register a loader, simply pass it in an array to `loadConfig()`.
-
-### Formal definition
-
-Loader functions must implement the `Loader` interface:
-
-```typescript
-interface Loader {
-    [key: string]: (params: any) => any
+  date: '2021-12-19T06:17:38.147Z',
+  pid: 71971,
+  ppid: 71970,
+  nodeVersion: 'v16.13.0'
 }
 ```
 
-It's not necessary, but you can import the Loader interface like so:
+**Possible values**: `"terse"`, `"verbose"`
 
-```typescript
-import {Loader} from 'lambdaconf';
-```
-
-In a conf file, any object with a single property matching the pattern `/^\[.*\]$/` (or `[...]`) is assumed to refer to a loader. If a matching loader is not found, it will throw a `LoaderNotFound` error.
+**Default**: `"verbose"` (recommended for production)
 
 
 
