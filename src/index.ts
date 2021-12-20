@@ -47,7 +47,7 @@ if (process.env.LOG && !ErrorLevel[process.env.LOG as keyof typeof ErrorLevel]) 
 
 const options: Options = {
     level: ErrorLevel[process.env.LOG as keyof typeof ErrorLevel] || ErrorLevel.info,
-    format: process.env.LOG_FORMAT === LogFormat.json ? LogFormat.json : LogFormat.human,
+    format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
     verbosity: process.env.LOG_VERBOSITY === LogVerbosity.terse ? LogVerbosity.terse : LogVerbosity.verbose,
 };
 
