@@ -5,7 +5,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 
-A small & simple logger for Typescript & Javascript projects. Does everything you need, nothing you don't. DevOps friendly.
+A DevOps friendly, small, and simple logger for Typescript/Javascript projects.
 
 **Structured Logs 🔒**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
@@ -16,7 +16,7 @@ A small & simple logger for Typescript & Javascript projects. Does everything yo
 - Transport should be handled outside of the process, not inside (this is the job of DevOps)
 - Configuration should also be handled outside of the code, not inside. This is also the job of DevOps.
 
-**Crazy Simple & Easy to Use 😃**
+**Simple & Easy to Use 😃**
 - Out-of-the-box Typescript support
 - Only 2 tiny dependencies, written in clean Typescript
 - Nice human readable output
