@@ -5,7 +5,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 
-A crazy-small, crazy-simple logger for Typescript & Javascript projects. Does everything you need, nothing you don't.
+A small & simple logger for Typescript & Javascript projects. Does everything you need, nothing you don't. DevOps friendly.
 
 **Structured Logs 🔒**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
@@ -28,7 +28,7 @@ A crazy-small, crazy-simple logger for Typescript & Javascript projects. Does ev
 ## Installation
 
 ```bash
-npm i jsout -D
+npm i jsout
 ```
  
 ## Example Usage
