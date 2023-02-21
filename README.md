@@ -12,11 +12,12 @@ A DevOps friendly, small, and simple logger for Typescript/Javascript projects.
 
 **Defensive & Devops Friendly 🛡**
 - Logs are enabled in production mode by default
+- Transport should be handled outside of the process via `STDOUT` and `STDERR`, not inside (this is the job of DevOps)
+- Configuration should also be handled outside of the code, not inside (also the job of DevOps)
 - Doesn't allow for fancy configurations that are easy to get wrong. Logging should be easy and simple.
-- Transport should be handled outside of the process, not inside (this is the job of DevOps)
-- Configuration should also be handled outside of the code, not inside. This is also the job of DevOps.
 
 **Simple & Easy to Use 😃**
+- Automatic Error serialization
 - Out-of-the-box Typescript support
 - Only 2 tiny dependencies, written in clean Typescript
 - Nice human readable output
@@ -39,6 +40,10 @@ import {logger} from 'jsout';
 logger.info('test message');
 logger.fatal('oops!', new Error(), {foo: 'bar'})
 logger.error('', new Error('test')); //infers "test" as message
+
+## Express.js HTTP Request Logger
+
+See [jsout-express](https://github.com/mhweiner/jsout-express)
 
 ```
 
@@ -72,10 +77,10 @@ If verbose, extra metadata is appended to `log.context`. Example:
 
 ```json
 {
-  date: '2021-12-19T06:17:38.147Z',
-  pid: 71971,
-  ppid: 71970,
-  nodeVersion: 'v16.13.0'
+  "date": "2021-12-19T06:17:38.147Z",
+  "pid": 71971,
+  "ppid": 71970,
+  "nodeVersion": "v16.13.0"
 }
 ```
 
@@ -87,7 +92,7 @@ If verbose, extra metadata is appended to `log.context`. Example:
 
 For all of the following, please note:
 
-- `error` should be an actual error with stack traces. This is not enforced is usually best practice.
+- `error` should be an actual `Error` object with stack traces. This is not enforced.
 - `context` should by any information not necessarily directly related to the error, ie. server request information, app component, configurations, etc. This is where the [verbose metadata](#processenvlog_verbosity) is appended (this will override anything in the context object).
 - `data` any object that might be useful to debug the error, or any pertinant information relating to the log message
 
