@@ -19,13 +19,13 @@ function colorizeLevel(level: ErrorLevel) {
         case ErrorLevel.trace:
             return kleur.bold().grey('TRACE');
         case ErrorLevel.debug:
-            return kleur.bold().yellow('DEBUG');
+            return kleur.bold().grey('DEBUG');
         case ErrorLevel.info:
             return kleur.bold().white('INFO');
         case ErrorLevel.warn:
-            return kleur.bold().red('WARN');
+            return kleur.bold().yellow('WARN');
         case ErrorLevel.error:
-            return kleur.bold().magenta('ERROR');
+            return kleur.bold().red('ERROR');
         case ErrorLevel.fatal:
             return kleur.bold().white().bgRed('FATAL');
 
