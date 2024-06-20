@@ -93,10 +93,11 @@ module.exports = {
     ],
     plugins: [
         ['@semantic-release/commit-analyzer', {
-            preset: 'angular',
+            preset: 'conventionalcommits',
             releaseRules: [
                 {type: 'docs', release: 'patch'},
                 {type: 'feat', release: 'minor'},
+                {type: 'feat!', release: 'major'},
                 {type: 'test', release: 'patch'},
                 {type: 'chore', release: 'patch'},
                 {type: 'perf', release: 'patch'},
@@ -105,8 +106,12 @@ module.exports = {
                 {type: 'refactor', release: 'patch'},
                 {type: 'build', release: 'patch'},
                 {type: 'fix', release: 'patch'},
+                {type: 'fix!', release: 'major'},
                 {type: 'revert', release: 'patch'},
             ],
+            parserOpts: {
+                noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES'],
+            },
         }],
         ['@semantic-release/release-notes-generator', {
             writerOpts: {transform},
