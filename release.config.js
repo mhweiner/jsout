@@ -1,6 +1,8 @@
 const types = {
     feat: {title: '✨ Features', release: 'minor'},
+    'feat!': {title: '✨ Features', release: 'major'},
     fix: {title: '🐛 Bug Fixes', release: 'patch'},
+    'fix!': {title: '🐛 Bug Fixes', release: 'major'},
     perf: {title: '⚡ Performance Improvements', release: 'patch'},
     revert: {title: '⏪ Reverts', release: 'patch'},
     docs: {title: '📚 Documentation', release: 'patch'},
@@ -94,21 +96,10 @@ module.exports = {
     plugins: [
         ['@semantic-release/commit-analyzer', {
             preset: 'conventionalcommits',
-            releaseRules: [
-                {type: 'docs', release: 'patch'},
-                {type: 'feat', release: 'minor'},
-                {type: 'feat!', release: 'major'},
-                {type: 'test', release: 'patch'},
-                {type: 'chore', release: 'patch'},
-                {type: 'perf', release: 'patch'},
-                {type: 'style', release: 'patch'},
-                {type: 'ci', release: 'patch'},
-                {type: 'refactor', release: 'patch'},
-                {type: 'build', release: 'patch'},
-                {type: 'fix', release: 'patch'},
-                {type: 'fix!', release: 'major'},
-                {type: 'revert', release: 'patch'},
-            ],
+            releaseRules: Object.entries(types).map(([key, value]) => ({
+                type: key,
+                release: value.release,
+            })),
             parserOpts: {
                 noteKeywords: ['BREAKING CHANGE', 'BREAKING CHANGES'],
             },
