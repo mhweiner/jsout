@@ -1,5 +1,5 @@
 import {test} from 'hoare';
-import {ErrorLevel, LogFormat, LogVerbosity} from '.';
+import {ErrorLevel, LogFormat} from '.';
 import * as outputModule from './output';
 import {mock} from 'cjs-mock';
 import {stub} from 'sinon';
@@ -14,7 +14,6 @@ test('output should use stdout if level <= INFO, stderr if level > INFO', (asser
     const opts = {
         level: ErrorLevel.fatal,
         format: LogFormat.json,
-        verbosity: LogVerbosity.terse,
     };
     const m: typeof outputModule = mock('./output', {
         './transports': {transports: {stderr: stubs.stderr, stdout: stubs.stdout}},
@@ -44,7 +43,6 @@ test('output should be stringified json if format is json', (assert) => {
     const opts = {
         level: ErrorLevel.fatal,
         format: LogFormat.json,
-        verbosity: LogVerbosity.terse,
     };
     const m: typeof outputModule = mock('./output', {
         './transports': {transports: {stderr: stubs.stderr, stdout: stubs.stdout}},
