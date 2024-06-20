@@ -1,25 +1,31 @@
-# jsout
+<picture>
+    <source srcset="docs/jsout.svg" media="(prefers-color-scheme: dark)">
+    <source srcset="docs/jsout-dark.svg" media="(prefers-color-scheme: light)">
+    <img src="docs/jsout-dark.svg" alt="Logo" style="margin: 0 0 10px" size="250">
+</picture>
 
-[![build status](https://github.com/mhweiner/jsout/actions/workflows/workflow.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
+---
+
+[![build status](https://github.com/mhweiner/jsout/actions/workflows/release.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
 [![semantic-release](https://img.shields.io/badge/semantic--release-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 
-A DevOps friendly, small, and simple logger for Typescript/Javascript projects.
+A DevOps friendly, small, and simple logger for Typescript/Javascript projects. Sponsored by [Aeroview](https://aeroview.io).
 
 **Structured Logs 🔒**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
 
 **Defensive & Devops Friendly 🛡**
 - Logs are enabled in production mode by default
-- Transport should be handled outside of the process via `STDOUT` and `STDERR`, not inside (this is the job of DevOps)
-- Configuration should also be handled outside of the code, not inside (also the job of DevOps)
-- Doesn't allow for fancy configurations that are easy to get wrong. Logging should be easy and simple.
+- Transport should be handled outside of the process via `STDOUT` and `STDERR`
+- Configuration should also be handled outside of the code
+- Simple configurations make it hard to mess up
+- Minimal dependencies
 
 **Simple & Easy to Use 😃**
 - Automatic Error serialization
 - Out-of-the-box Typescript support
-- Only 2 tiny dependencies, written in clean Typescript
 - Nice human readable output
 
 **Flexible & Powerful 💪**
@@ -40,16 +46,19 @@ import {logger} from 'jsout';
 logger.info('test message');
 logger.fatal('oops!', new Error(), {foo: 'bar'})
 logger.error('', new Error('test')); //infers "test" as message
+```
 
 ## Express.js HTTP Request Logger
 
 See [jsout-express](https://github.com/mhweiner/jsout-express)
 
-```
-
 ## Configuration
 
-Configuration is set through the CLI environment variables (aka `process.env` variables in node.js). For example, here is a recommended setup for local development:
+Configuration is set through the CLI environment variables. By default, the logger is set to `info` level, `json` format, and `verbose` verbosity, which is recommended for production.
+
+You can override these settings by setting the following environment variables before running your application.
+
+For example, here is the recommended way to run your application locally:
 
 ```bash
 LOG=debug LOG_FORMAT=human LOG_VERBOSITY=terse node /path/to/yourApp.js
@@ -122,7 +131,7 @@ Emits a log to `stderr` with a level of `FATAL (60)`
 
 ## Contribution
 
-Please contribute to this project! Issue a PR against `master` and request review. 
+Please contribute to this project! Issue a PR against `main` and request review. 
 
 - Please test your work thoroughly.
 - Make sure all tests pass with appropriate coverage.
@@ -138,3 +147,13 @@ npm i
 ```shell script
 npm test
 ```
+
+## Get better observability with Aeroview
+
+<picture>
+    <source srcset="docs/aeroview-logo-lockup.svg" media="(prefers-color-scheme: dark)">
+    <source srcset="docs/aeroview-logo-lockup-dark.svg" media="(prefers-color-scheme: light)">
+    <img src="docs/aeroview-logo-lockup-dark.svg" alt="Logo" style="max-width: 150px;margin: 0 0 10px">
+</picture>
+
+Aeroview is a developer-friendly, AI-powered observability platform that helps you monitor, troubleshoot, and optimize your applications. Get started for free at [https://aeroview.io](https://aeroview.io).
