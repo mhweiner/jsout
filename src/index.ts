@@ -3,6 +3,7 @@ import {log} from './log';
 export type Options = {
     level: ErrorLevel
     format: LogFormat
+    verbosity: LogVerbosity
 };
 
 export enum ErrorLevel {
@@ -22,11 +23,20 @@ export enum LogFormat {
     human = 'human',
 }
 
+/**
+ * Set with process.env.LOG_VERBOSITY
+ */
+export enum LogVerbosity {
+    verbose = 'verbose', // default
+    terse = 'terse', // better for local dev
+}
+
 export type Log = {
     level: ErrorLevel
     message?: string
     error?: {}
     data?: {}
+    context?: {}
 };
 
 if (process.env.LOG && !ErrorLevel[process.env.LOG as keyof typeof ErrorLevel]) {
@@ -38,25 +48,26 @@ if (process.env.LOG && !ErrorLevel[process.env.LOG as keyof typeof ErrorLevel]) 
 const options: Options = {
     level: ErrorLevel[process.env.LOG as keyof typeof ErrorLevel] || ErrorLevel.info,
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
+    verbosity: process.env.LOG_VERBOSITY === LogVerbosity.terse ? LogVerbosity.terse : LogVerbosity.verbose,
 };
 
 export const logger = {
-    trace: (message?: string, data?: any) => log({
-        level: ErrorLevel.trace, message, data, options,
+    trace: (message?: string, data?: any, context?: any) => log({
+        level: ErrorLevel.trace, message, data, context, options,
     }),
-    debug: (message?: string, data?: any) => log({
-        level: ErrorLevel.debug, message, data, options,
+    debug: (message?: string, data?: any, context?: any) => log({
+        level: ErrorLevel.debug, message, data, context, options,
     }),
-    info: (message?: string, data?: any) => log({
-        level: ErrorLevel.info, message, data, options,
+    info: (message?: string, data?: any, context?: any) => log({
+        level: ErrorLevel.info, message, data, context, options,
     }),
-    warn: (message?: string, error?: any, data?: any) => log({
-        level: ErrorLevel.warn, message, data, options, error,
+    warn: (message?: string, error?: any, data?: any, context?: any) => log({
+        level: ErrorLevel.warn, message, data, context, options, error,
     }),
-    error: (message?: string, error?: any, data?: any) => log({
-        level: ErrorLevel.error, message, data, options, error,
+    error: (message?: string, error?: any, data?: any, context?: any) => log({
+        level: ErrorLevel.error, message, data, context, options, error,
     }),
-    fatal: (message?: string, error?: any, data?: any) => log({
-        level: ErrorLevel.fatal, message, data, options, error,
+    fatal: (message?: string, error?: any, data?: any, context?: any) => log({
+        level: ErrorLevel.fatal, message, data, context, options, error,
     }),
 };

@@ -40,8 +40,9 @@ function humanFormat(log: Log) {
     const message = `Message: ${log.message}\n`;
     const error = log.error ? `${insp(log.error)}\n` : '';
     const data = log.data ? `${insp(log.data)}\n` : '';
+    const context = log.context ? `${insp(log.context)}\n` : '';
 
-    return `\n${level}${message}${error}${data}`;
+    return `\n${level}${message}${error}${data}${context}`;
 
 }
 

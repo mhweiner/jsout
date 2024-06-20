@@ -14,13 +14,13 @@
 A DevOps friendly, small, and simple logger for Typescript/Javascript projects. Sponsored by [Aeroview](https://aeroview.io).
 
 **Structured Logs 🔒**
-- Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, Datadog, and [Aeroview](https://aeroview.io).
+- Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
 
 **Defensive & Devops Friendly 🛡**
 - Logs are enabled in production mode by default
 - Transport should be handled outside of the process via `STDOUT` and `STDERR`
-- Configuration should be handled outside of the process via environment variables, making it easy to configure in containerized environments
-- Simple configuration makes it hard to mess up
+- Configuration should also be handled outside of the code
+- Simple configurations make it hard to mess up
 - Minimal dependencies
 
 **Simple & Easy to Use 😃**
@@ -44,12 +44,9 @@ npm i jsout
 import {logger} from 'jsout';
 
 logger.info('test message');
-logger.debug('', {foo: 'bar'});
-logger.fatal('oops!', new Error('ahmahgawd'), {foo: 'bar'}) // overwrites message but retains original error, and adds data
-logger.error('', new Error('test')); //infers "test" as message (anything falsy for message and the message be inferred from the error)
+logger.fatal('oops!', new Error(), {foo: 'bar'})
+logger.error('', new Error('test')); //infers "test" as message
 ```
-
-Just import the logger and start logging! We recommend using the logger in a singleton pattern, but it's up to you. Feel free to wrap it in a class or a function if you prefer.
 
 ## Express.js HTTP Request Logger
 
@@ -57,14 +54,14 @@ See [jsout-express](https://github.com/mhweiner/jsout-express)
 
 ## Configuration
 
-Configuration is set through the CLI environment variables. By default, the logger is set to `info` level, and `json` format, which is recommended for production.
+Configuration is set through the CLI environment variables. By default, the logger is set to `info` level, `json` format, and `verbose` verbosity, which is recommended for production.
 
 You can override these settings by setting the following environment variables before running your application.
 
 For example, here is the recommended way to run your application locally:
 
 ```bash
-LOG=debug LOG_FORMAT=human node /path/to/yourApp.js
+LOG=debug LOG_FORMAT=human LOG_VERBOSITY=terse node /path/to/yourApp.js
 ```
 
 ### `process.env.LOG`
@@ -83,34 +80,52 @@ Set the format for the output to either be human-readable (great for local devel
 
 **Default**: `"json"` (recommended for production)
 
+### `process.env.LOG_VERBOSITY`
+
+If verbose, extra metadata is appended to `log.context`. Example:
+
+```json
+{
+  "date": "2021-12-19T06:17:38.147Z",
+  "pid": 71971,
+  "ppid": 71970,
+  "nodeVersion": "v16.13.0"
+}
+```
+
+**Possible values**: `"terse"`, `"verbose"`
+
+**Default**: `"verbose"` (recommended for production)
+
 ## API
 
 For all of the following, please note:
 
 - `error` should be an actual `Error` object with stack traces. This is not enforced.
+- `context` should by any information not necessarily directly related to the error, ie. server request information, app component, configurations, etc. This is where the [verbose metadata](#processenvlog_verbosity) is appended (this will override anything in the context object).
 - `data` any object that might be useful to debug the error, or any pertinant information relating to the log message
 
-### `logger.trace(message?: string, data?: any)`
+### `logger.trace(message?: string, data?: any, context?: any)`
 
 Emits a log to `stdout` with a level of `TRACE (10)`
 
-### `logger.debug(message?: string, data?: any)`
+### `logger.debug(message?: string, data?: any, context?: any)`
 
 Emits a log to `stdout` with a level of `DEBUG (20)`
 
-### `logger.info(message?: string, data?: any)`
+### `logger.info(message?: string, data?: any, context?: any)`
 
 Emits a log to `stdout` with a level of `INFO (30)`
 
-### `logger.warn(message?: string, error?: any, data?: any)`
+### `logger.warn(message?: string, error?: any, data?: any, context?: any)`
 
 Emits a log to `stderr` with a level of `WARN (40)`
 
-### `logger.error(message?: string, error?: any, data?: any)`
+### `logger.error(message?: string, error?: any, data?: any, context?: any)`
 
 Emits a log to `stderr` with a level of `ERROR (50)`
 
-### `logger.fatal(message?: string, error?: any, data?: any)`
+### `logger.fatal(message?: string, error?: any, data?: any, context?: any)`
 
 Emits a log to `stderr` with a level of `FATAL (60)`
 
