@@ -95,7 +95,6 @@ module.exports = {
     ],
     plugins: [
         ['@semantic-release/commit-analyzer', {
-            preset: 'conventionalcommits',
             releaseRules: Object.entries(types).map(([key, value]) => ({
                 type: key,
                 release: value.release,
