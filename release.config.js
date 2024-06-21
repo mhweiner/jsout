@@ -93,6 +93,7 @@ module.exports = {
     ],
     plugins: [
         ['@semantic-release/commit-analyzer', {
+            preset: 'conventionalcommits',
             releaseRules: Object.entries(types).map(([key, value]) => ({
                 type: key,
                 release: value.release,
@@ -102,10 +103,10 @@ module.exports = {
             },
         }],
         ['@semantic-release/release-notes-generator', {
+            preset: 'conventionalcommits',
             writerOpts: {transform},
         }],
         '@semantic-release/npm',
         '@semantic-release/github',
     ],
-    preset: 'conventionalcommits',
 };
