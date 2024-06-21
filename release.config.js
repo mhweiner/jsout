@@ -1,8 +1,6 @@
 const types = {
     feat: {title: '✨ Features', release: 'minor'},
-    'feat!': {title: '✨ Features', release: 'major'},
     fix: {title: '🐛 Bug Fixes', release: 'patch'},
-    'fix!': {title: '🐛 Bug Fixes', release: 'major'},
     perf: {title: '⚡ Performance Improvements', release: 'patch'},
     revert: {title: '⏪ Reverts', release: 'patch'},
     docs: {title: '📚 Documentation', release: 'patch'},
@@ -18,7 +16,7 @@ const transform = (commit, context) => {
 
     const notes = commit.notes.map((note) => ({
         ...note,
-        title: 'BREAKING CHANGES',
+        title: '🚨 BREAKING CHANGES 🚨',
     }));
     const type = types[commit.type] ? types[commit.type].title : commit.type;
     const scope = commit.scope === '*' ? '' : commit.scope;
@@ -109,4 +107,5 @@ module.exports = {
         '@semantic-release/npm',
         '@semantic-release/github',
     ],
+    preset: 'conventionalcommits',
 };
