@@ -13,32 +13,32 @@
 
 A DevOps friendly, small, and simple logger for Typescript/Javascript projects. Sponsored by [Aeroview](https://aeroview.io).
 
-**Structured Logs 🔒**
+**🔒 Structured Logs**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like sumologic, New Relic, DataDog, etc.
 
-**Defensive & Devops Friendly 🛡**
+**🛡 Defensive & Devops Friendly**
 - Logs are enabled in production mode by default
 - Transport should be handled outside of the process via `STDOUT` and `STDERR`
 - Configuration should also be handled outside of the code
 - Simple configurations make it hard to mess up
 - Minimal dependencies
 
-**Simple & Easy to Use 😃**
+**😃 Simple & Easy to Use**
 - Automatic Error serialization
 - Out-of-the-box Typescript support
 - Nice human readable output
 
-**Flexible & Powerful 💪**
+**💪 Flexible & Powerful**
 - Easily set configuration using simple CLI overrides
 - Simple and well-defined enough to build custom tooling around, such as custom error handling and logging pipelines.
 
-## Installation
+# Installation
 
 ```bash
 npm i jsout
 ```
  
-## Example Usage
+# Example Usage
 
 ```typescript
 import {logger} from 'jsout';
@@ -48,11 +48,11 @@ logger.fatal('oops!', new Error(), {foo: 'bar'})
 logger.error('', new Error('test')); //infers "test" as message
 ```
 
-## Express.js HTTP Request Logger
+# Plugins
 
-See [jsout-express](https://github.com/mhweiner/jsout-express)
+- [Express Request Logger](https://github.com/mhweiner/jsout-express)
 
-## Configuration
+# Configuration
 
 Configuration is set through the CLI environment variables. By default, the logger is set to `info` level, `json` format, and `verbose` verbosity, which is recommended for production.
 
@@ -64,7 +64,7 @@ For example, here is the recommended way to run your application locally:
 LOG=debug LOG_FORMAT=human LOG_VERBOSITY=terse node /path/to/yourApp.js
 ```
 
-### `process.env.LOG`
+## `LOG`
 
 Sets the log level. Any logs lower than this log level are ignored.
 
@@ -72,7 +72,7 @@ Sets the log level. Any logs lower than this log level are ignored.
 
 **Default**: `"info"` (recommended for production)
 
-### `process.env.LOG_FORMAT`
+## `LOG_FORMAT`
 
 Set the format for the output to either be human-readable (great for local development in the console), or JSON formatted (great for data aggregation on a server).
 
@@ -80,7 +80,7 @@ Set the format for the output to either be human-readable (great for local devel
 
 **Default**: `"json"` (recommended for production)
 
-### `process.env.LOG_VERBOSITY`
+## `LOG_VERBOSITY`
 
 If verbose, extra metadata is appended to `log.context`. Example:
 
@@ -97,7 +97,7 @@ If verbose, extra metadata is appended to `log.context`. Example:
 
 **Default**: `"verbose"` (recommended for production)
 
-## API
+# API
 
 For all of the following, please note:
 
@@ -129,26 +129,16 @@ Emits a log to `stderr` with a level of `ERROR (50)`
 
 Emits a log to `stderr` with a level of `FATAL (60)`
 
-## Contribution
+# Support, Feedback, and Contributions
 
-Please contribute to this project! Issue a PR against `main` and request review. 
+- Star this repo if you like it!
+- Submit an [issue](https://github.com/mhweiner/jsout/issues) with your problem, feature request or bug report
+- Issue a PR against `main` and request review. Make sure all tests pass and coverage is good.
+- Write about `jsout` in your blog, tweet about it, or share it with your friends!
 
-- Please test your work thoroughly.
-- Make sure all tests pass with appropriate coverage.
+Together we can make software more reliable and easier to maintain!
 
-### How to build locally
-
-```bash
-npm i
-```
-
-### Running tests
-
-```shell script
-npm test
-```
-
-## Get better observability with Aeroview
+# Sponsors
 
 <picture>
     <source srcset="docs/aeroview-logo-lockup.svg" media="(prefers-color-scheme: dark)">
