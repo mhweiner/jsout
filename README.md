@@ -64,7 +64,7 @@ For example, here is the recommended way to run your application locally:
 LOG=debug LOG_FORMAT=human LOG_VERBOSITY=terse node /path/to/yourApp.js
 ```
 
-## `LOG`
+### `LOG`
 
 Sets the log level. Any logs lower than this log level are ignored.
 
@@ -72,7 +72,7 @@ Sets the log level. Any logs lower than this log level are ignored.
 
 **Default**: `"info"` (recommended for production)
 
-## `LOG_FORMAT`
+### `LOG_FORMAT`
 
 Set the format for the output to either be human-readable (great for local development in the console), or JSON formatted (great for data aggregation on a server).
 
@@ -80,7 +80,7 @@ Set the format for the output to either be human-readable (great for local devel
 
 **Default**: `"json"` (recommended for production)
 
-## `LOG_VERBOSITY`
+### `LOG_VERBOSITY`
 
 If verbose, extra metadata is appended to `log.context`. Example:
 
