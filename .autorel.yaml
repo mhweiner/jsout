@@ -10,4 +10,6 @@ commitTypes:
   - {type: build, title: 🏗 Build System, release: patch}
   - {type: ci, title: 🔧 Continuous Integration, release: patch}
 branches:
-  - {name: main, channel: next}
+  - {name: main}
+  - {name: next, channel: next}
+dryRun: true
