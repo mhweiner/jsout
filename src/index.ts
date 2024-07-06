@@ -1,18 +1,24 @@
 import {log} from './log';
+import {stdio} from './transports';
 
-export type Options = {
-    level: ErrorLevel
+export type CliOptions = {
+    level: LogLevel
     format: LogFormat
-    verbosity: LogVerbosity
 };
 
-export enum ErrorLevel {
-    fatal = 60, // The service is going to stop or become unusable now. Requires IMMEDIATE attention.
-    error = 50, // Possibly fatal for a particular request. Requires attention ASAP.
-    warn = 40, // Possible issue that could root cause a bug. Attention advised. If not an issue, demote to info/debug.
-    info = 30, // Detail on regular operation. Be careful what you put here, it can become noisy.
-    debug = 20, // Anything else, i.e. too verbose to be included in "info" level. Not used in staging/production.
-    trace = 10, // Logging from external libraries used by your app or very detailed application logging.
+export enum LogLevel {
+    emerg = 0, // System is unusable. (Not for application use)
+    alert = 1, // Action must be taken immediately  (Not for application use)
+    fatal = 2, // The service is going to stop or become unusable. Unrecoverable error. Immediate attention required.
+    critical = 2,
+    crit = 2,
+    err = 3, // Error condition. Requires attention.
+    error = 3,
+    warn = 4, // Possible issue that could root cause a bug. Attention advised. If not an issue, demote to info/debug.
+    warning = 4,
+    notice = 5, // Normal but significant condition. No action required.
+    info = 6, // Detail on regular operation.
+    debug = 7, // Anything else, i.e. too verbose to be included in "info" level. Not used in production.
 }
 
 /**
@@ -23,51 +29,55 @@ export enum LogFormat {
     human = 'human',
 }
 
-/**
- * Set with process.env.LOG_VERBOSITY
- */
-export enum LogVerbosity {
-    verbose = 'verbose', // default
-    terse = 'terse', // better for local dev
-}
+if (process.env.LOG && !LogLevel[process.env.LOG as keyof typeof LogLevel]) {
 
-export type Log = {
-    level: ErrorLevel
-    message?: string
-    error?: {}
-    data?: {}
-    context?: {}
-};
-
-if (process.env.LOG && !ErrorLevel[process.env.LOG as keyof typeof ErrorLevel]) {
-
-    throw new Error('process.env.LOG must be one of fatal, error, warn, info, debug, trace');
+    throw new Error('process.env.LOG must be numeric value of [2, 7], or one of the following: crit, critical, fatal, err, error, warn, warning, notice, info, debug');
 
 }
 
-const options: Options = {
-    level: ErrorLevel[process.env.LOG as keyof typeof ErrorLevel] || ErrorLevel.info,
+const options: CliOptions = {
+    level: LogLevel[process.env.LOG as keyof typeof LogLevel] || LogLevel.info,
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
-    verbosity: process.env.LOG_VERBOSITY === LogVerbosity.terse ? LogVerbosity.terse : LogVerbosity.verbose,
 };
+
 
 export const logger = {
-    trace: (message?: string, data?: any, context?: any) => log({
-        level: ErrorLevel.trace, message, data, context, options,
+    emerg: (message?: string, data?: any) => log({
+        level: LogLevel.emerg, message, data, options, transport: stdio,
     }),
-    debug: (message?: string, data?: any, context?: any) => log({
-        level: ErrorLevel.debug, message, data, context, options,
+    alert: (message?: string, data?: any) => log({
+        level: LogLevel.alert, message, data, options, transport: stdio,
     }),
-    info: (message?: string, data?: any, context?: any) => log({
-        level: ErrorLevel.info, message, data, context, options,
+    crit: (message?: string, data?: any) => log({
+        level: LogLevel.crit, message, data, options, transport: stdio,
     }),
-    warn: (message?: string, error?: any, data?: any, context?: any) => log({
-        level: ErrorLevel.warn, message, data, context, options, error,
+    critical: (message?: string, data?: any) => log({
+        level: LogLevel.crit, message, data, options, transport: stdio,
     }),
-    error: (message?: string, error?: any, data?: any, context?: any) => log({
-        level: ErrorLevel.error, message, data, context, options, error,
+    fatal: (message?: string, data?: any) => log({
+        level: LogLevel.crit, message, data, options, transport: stdio,
     }),
-    fatal: (message?: string, error?: any, data?: any, context?: any) => log({
-        level: ErrorLevel.fatal, message, data, context, options, error,
+    err: (message?: string, data?: any) => log({
+        level: LogLevel.err, message, data, options, transport: stdio,
+    }),
+    error: (message?: string, data?: any) => log({
+        level: LogLevel.err, message, data, options, transport: stdio,
+    }),
+    warn: (message?: string, data?: any) => log({
+        level: LogLevel.warn, message, data, options, transport: stdio,
+    }),
+    warning: (message?: string, data?: any) => log({
+        level: LogLevel.warn, message, data, options, transport: stdio,
+    }),
+    notice: (message?: string, data?: any) => log({
+        level: LogLevel.notice, message, data, options, transport: stdio,
+    }),
+    info: (message?: string, data?: any) => log({
+        level: LogLevel.info, message, data, options, transport: stdio,
+    }),
+    debug: (message?: string, data?: any) => log({
+        level: LogLevel.debug, message, data, options, transport: stdio,
     }),
 };
+
+export * from './log';
