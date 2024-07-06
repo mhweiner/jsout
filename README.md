@@ -88,7 +88,7 @@ Set the format for the output to either be human-readable (great for local devel
 
 **Default**: `"json"` (recommended for production)
 
-# API
+# API 
 
 Log levels are based on the [syslog](https://datatracker.ietf.org/doc/html/rfc5424) levels:
 
