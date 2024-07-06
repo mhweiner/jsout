@@ -13,3 +13,4 @@ branches:
   - {name: main}
   - {name: next, channel: next}
 dryRun: true
+publish: true
