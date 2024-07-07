@@ -1,13 +1,15 @@
 {
   "name": "jsout",
-  "version": "0.0.0-semantic-release",
-  "description": "A very small, simple, opinionated, and structured logger for Typescript and Javascript.",
+  "version": "0.0.0-autorel",
+  "description": "A Syslog-compatible, small, and simple logger for Typescript/Javascript projects. Sponsored by https://aeroview.io",
   "license": "MIT",
   "author": "Marc H. Weiner <mhweiner234@gmail.com> (https://mhweiner.com)",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
+    "!dist/**/*.map",
+    "!dist/**/*.spec.*",
     "package.json",
     "package-lock.json"
   ],
@@ -18,8 +20,7 @@
   "scripts": {
     "test": "npm run build && c8 hoare 'src/**/*.spec.ts' && c8 report -r text -r html",
     "lint": "eslint ./ --ext .js,.ts",
-    "build": "rm -rf ./dist && tsc",
-    "semantic-release": "semantic-release"
+    "build": "rm -rf ./dist && tsc"
   },
   "homepage": "https://github.com/mhweiner/jsout",
   "keywords": [
@@ -36,11 +37,10 @@
     "@types/sinon": "^10.0.6",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
-    "c8": "^7.10.0",
+    "c8": "^10.1.2",
     "cjs-mock": "^0.1.0",
-    "conventional-changelog-conventionalcommits": "^8.0.0",
     "eslint": "^8.4.1",
-    "hoare": "^3.0.3",
+    "hoare": "^3.1.9",
     "sinon": "^12.0.1",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.4"
