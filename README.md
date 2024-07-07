@@ -108,7 +108,7 @@ These might be too granular for most applications, so here's what we recommend:
 - **Emergency & Alert**: Reserved for infra-level logs. Should not be used by typical user applications.
 - **Fatal**: Unrecoverable errors, such as a process crashing.
 - **Error**: Recoverable errors, such as a failed request.
-- **Warning**: Warnings, such as a process using too much memory.
+- **Warning**: 4xx HTTP responses, unexpected behavior, or potential issues.
 - **Info**: Anything else that might be useful to debug the application. However, beware of logging sensitive information and overloading logs with too much information. This can get expensive and slow down your application.
 
 For those functions that accept error objects, the `error` object is automatically serialized into a JSON object. `error` should be an instance of `Error` with a stack trace, but this is not enforced.
