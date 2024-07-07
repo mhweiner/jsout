@@ -8,7 +8,7 @@
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 
-A Syslog-compatible, small, and simple logger for Typescript/Javascript projects. Sponsored by [Aeroview](https://aeroview.io).
+A Syslog-compatible, small, and simple logger for Typescript/Javascript Node.js projects. Sponsored by [Aeroview](https://aeroview.io).
 
 **🔒 Structured Logs**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like Sumo Logic, New Relic, Datadog, and Aeroview.
@@ -54,14 +54,14 @@ logger.error('', new Error('test')); //infers "test" as message
 
 # Configuration
 
-Configuration is set through the CLI environment variables. By default, the logger is set to `info` level, `json` format, and `verbose` verbosity, which is recommended for production.
+Configuration is set through environment variables. By default, the logger is set to `info` level and `json` format, which is recommended for production.
 
 You can override these settings by setting the following environment variables before running your application.
 
-For example, here is the recommended way to run your application locally:
+For example, here are the recommended settings when running your application locally:
 
 ```bash
-LOG=debug LOG_FORMAT=human node /path/to/yourApp.js
+LOG=debug LOG_FORMAT=human ts-node /path/to/app.ts
 ```
 
 ## `LOG`
@@ -88,28 +88,32 @@ Set the format for the output to either be human-readable (great for local devel
 
 **Default**: `"json"` (recommended for production)
 
-# API 
+# Logger API 
 
 Log levels are based on the [syslog](https://datatracker.ietf.org/doc/html/rfc5424) levels:
 
 | Level | Severity | Example |
 |-------|------------|---------|
-| 0     | Emergency      | System is unusable. Should not be used by applications. |
-| 1     | Alert      | Action must be taken immediately to prevent system failure. For example, a process is down. |
-| 2     | Critical       | Critical conditions. For example, a hard disk is full, or process is crashing. |
-| 3     | Error        | Error conditions. For example, a file is missing. |
-| 4     | Warning    | Warning conditions. For example, a process is using too much memory. |
-| 5     | Notice     | Normal but significant events that do not indicate a problem. Ie, a process is starting. |
-| 6     | Informational       | General informational messages about normal operations. |
-| 7     | Debug      | Debugging messages. |
+| 0     | Emergency      | <sup>System is unusable. Should not be used by typical applications.</sup> |
+| 1     | Alert      | <sup>Action must be taken immediately to prevent system failure. For example, a process is down. Should not be used by typical applications.</sup> |
+| 2     | Critical/Fatal       | <sup>Critical conditions. For example, a hard disk is full, or process is crashing. Unrecoverable errors.</sup> |
+| 3     | Error        | <sup>Error conditions. For example, a failed request resulting in a 500 HTTP response.</sup> |
+| 4     | Warning    | <sup>Warning conditions. For example, a process is using too much memory. Fully recoverable, not immediate issue.</sup> |
+| 5     | Notice     | <sup>Normal but significant events that do not indicate a problem. Ie, a process is starting.</sup> |
+| 6     | Informational       | <sup>General informational messages about normal operations.</sup> |
+| 7     | Debug      | <sup>Debugging messages.</sup> |
 
-These might be a bit too granular for most applications, but they are present to be `syslog` compatible. 
+These might be too granular for most applications, so here's what we recommend:
 
-__We recommend using `info` for most logs, `warn` for warnings, `error` for recoverable errors, and `fatal` (an alias for `critical`) for unrecoverable errors.__
+- **Emergency & Alert**: Reserved for infra-level logs. Should not be used by typical user applications.
+- **Fatal**: Unrecoverable errors, such as a process crashing.
+- **Error**: Recoverable errors, such as a failed request.
+- **Warning**: Warnings, such as a process using too much memory.
+- **Info**: Anything else that might be useful to debug the application. However, beware of logging sensitive information and overloading logs with too much information. This can get expensive and slow down your application.
 
 For those functions that accept error objects, the `error` object is automatically serialized into a JSON object. `error` should be an instance of `Error` with a stack trace, but this is not enforced.
 
-`data` is any object that might be useful to debug the error, or any pertinant information relating to the log message.
+`data` is an object, containing any contextual information that might be useful to debug the error, or any pertinant information relating to the log message.
 
 ## Emergency (0)
 
@@ -146,6 +150,30 @@ For those functions that accept error objects, the `error` object is automatical
 ## Debug (7)
 
 - `logger.debug(message?: string, data?: any)`
+
+# Low-Level API
+
+## log
+
+`log(input: LogInput)`
+
+The low-level API for logging. This is used by all the `logger` functions. For `LogInput` type, see [log.ts](blob/main/src/log.ts). You can use this function to build custom logging functions.
+
+Example:
+
+```typescript
+import {log} from 'jsout';
+
+log({
+    level: 6,
+    message: 'test message',
+    data: {foo: 'bar'},
+    options: {
+        level: 'info',
+        format: 'json',
+    }
+})
+```
 
 # Why should logs use `STDOUT` and `STDERR`?
 

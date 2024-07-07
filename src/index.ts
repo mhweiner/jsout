@@ -40,7 +40,6 @@ const options: CliOptions = {
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
 };
 
-
 export const logger = {
     emerg: (message?: string, data?: any) => log({
         level: LogLevel.emerg, message, data, options, transport: stdio,
