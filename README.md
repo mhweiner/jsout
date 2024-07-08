@@ -185,7 +185,7 @@ Logs should be emitted to `STDOUT` and `STDERR` for a few reasons:
 
 3. **Reliability**: By emitting logs to `STDOUT` and `STDERR`, you can ensure that logs are captured and processed even if the application crashes or exits unexpectedly.
 
-# Support, Feedback, and Contributions
+# Support, Feedback, and Contributions 
 
 - Star this repo if you like it!
 - Submit an [issue](https://github.com/mhweiner/jsout/issues) with your problem, feature request or bug report
