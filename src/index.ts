@@ -41,32 +41,32 @@ const options: CliOptions = {
 };
 
 export const logger = {
-    emerg: (message?: string, data?: any) => log({
-        level: LogLevel.emerg, message, data, options, transport: stdio,
+    emerg: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.emerg, message, error, data, options, transport: stdio,
     }),
-    alert: (message?: string, data?: any) => log({
-        level: LogLevel.alert, message, data, options, transport: stdio,
+    alert: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.alert, message, error, data, options, transport: stdio,
     }),
-    crit: (message?: string, data?: any) => log({
-        level: LogLevel.crit, message, data, options, transport: stdio,
+    crit: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.crit, message, error, data, options, transport: stdio,
     }),
-    critical: (message?: string, data?: any) => log({
-        level: LogLevel.crit, message, data, options, transport: stdio,
+    critical: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.crit, message, error, data, options, transport: stdio,
     }),
-    fatal: (message?: string, data?: any) => log({
-        level: LogLevel.crit, message, data, options, transport: stdio,
+    fatal: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.crit, message, error, data, options, transport: stdio,
     }),
-    err: (message?: string, data?: any) => log({
-        level: LogLevel.err, message, data, options, transport: stdio,
+    err: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.err, message, error, data, options, transport: stdio,
     }),
-    error: (message?: string, data?: any) => log({
-        level: LogLevel.err, message, data, options, transport: stdio,
+    error: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.err, message, error, data, options, transport: stdio,
     }),
-    warn: (message?: string, data?: any) => log({
-        level: LogLevel.warn, message, data, options, transport: stdio,
+    warn: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.warn, message, error, data, options, transport: stdio,
     }),
-    warning: (message?: string, data?: any) => log({
-        level: LogLevel.warn, message, data, options, transport: stdio,
+    warning: (message?: string, error?: any, data?: any) => log({
+        level: LogLevel.warn, message, error, data, options, transport: stdio,
     }),
     notice: (message?: string, data?: any) => log({
         level: LogLevel.notice, message, data, options, transport: stdio,
