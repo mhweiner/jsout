@@ -179,11 +179,13 @@ log({
 
 Logs should be emitted to `STDOUT` and `STDERR` for a few reasons:
 
-1. **Separation of Concerns**: Logs should be handled by a separate process, not the application itself. This allows for better error handling and logging, and prevents the application from crashing due to logging errors.
+1. **Decoupling Logging from the Application**: By emitting logs to STDOUT and STDERR, the application separates the concern of logging from its core functionality. This approach allows the application to focus solely on its primary tasks, while a separate process or system manages the logging. This decoupling enhances modularity and simplifies the application’s architecture.
 
-2. **Standardization**: `STDOUT` and `STDERR` are standard streams that are used by many logging tools and services. By emitting logs to these streams, you can easily integrate with existing logging pipelines and services.
+2.  **Reliability and Robustness**: Handling logs within the application can introduce additional points of failure. If the process being monitored crashes, the logs may be lost, making it difficult to diagnose the issue. If the logging mechanism fails, it could potentially impact the application’s performance or even cause crashes. Emitting logs to STDOUT and STDERR ensures that the application remains unaffected by logging failures, as these standard streams are managed by the underlying operating system or container runtime.
 
-3. **Reliability**: By emitting logs to `STDOUT` and `STDERR`, you can ensure that logs are captured and processed even if the application crashes or exits unexpectedly.
+3.  **Scalability and Flexibility**: Emitting logs to standard streams allows for greater scalability and flexibility. Logs can be easily redirected, aggregated, and processed by external tools or services designed specifically for log management. This approach supports various logging strategies without requiring changes to the application code, enabling seamless integration with diverse logging infrastructures.
+
+4. **Simplified Deployment and Management**: Emitting logs to STDOUT and STDERR simplifies deployment and management processes. Applications do not need to be configured with complex logging libraries or dependencies, reducing the risk of configuration errors and simplifying the deployment pipeline. This also aligns well with containerized environments (e.g., Docker), where standard streams are commonly used for log collection and monitoring.
 
 # Support, Feedback, and Contributions 
 
