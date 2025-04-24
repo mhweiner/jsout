@@ -80,3 +80,4 @@ export const logger = {
 };
 
 export * from './log';
+export * from './fakeLoggerFactory';
