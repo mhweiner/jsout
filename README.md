@@ -12,29 +12,23 @@
 
 A Syslog-compatible, small, and simple logger for Typescript/Javascript Node.js projects. Sponsored by [Aeroview](https://aeroview.io).
 
-**🔒 Structured Logs**
-- Supports both human-readable CLI output and JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/).
-- JSON output is structured and easy to parse, making it ideal for log aggregation and analysis.
-- Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a), for easy-to-read traces across multiple layers of your application.
-
-**✅ Syslog Compatible**
-
-- Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output format make it easy to integrate with existing logging pipelines and 3rd party services.
+**🔒 Syslog Compatible Structured Logs**
+- ✅ Supports both human-readable CLI output and JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/).
+- ✅ Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a), for easy-to-read traces across multiple layers of your application.
+- ✅ Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output format make it easy to integrate with existing logging pipelines and 3rd party services.
 
 **🛡 Defensive & Devops Friendly**
 - Logs are enabled in production mode by default, avoding the mistake of forgetting to enable logs in production which could be disastrous.
 - Transport should be handled [outside of the process](#why-should-logs-use-stdout-and-stderr) via `STDOUT` and `STDERR`
 - Simple configurations makes it hard to mess up
 - Minimal dependencies, fast, and reliable TypeScript codebase
+- Easily set configuration using simple CLI overrides
+- Simple and well-defined enough to build custom tooling around, such as plugins, custom error handling, and logging pipelines.
 
 **😃 Simple & Easy to Use**
 - Automatic Error serialization
 - Out-of-the-box Typescript support
-- Nice human readable output
-
-**💪 Flexible & Powerful**
-- Easily set configuration using simple CLI overrides
-- Simple and well-defined enough to build custom tooling around, such as plugins, custom error handling, and logging pipelines.
+- Very nice human readable output
 
 # Installation
 
