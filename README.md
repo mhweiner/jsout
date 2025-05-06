@@ -55,17 +55,18 @@ Configuration is set through environment variables. By default, the logger is se
 
 You can override these settings by setting the following environment variables before running your application.
 
-## Example: Production
+## Production
+
+Recommended settings for production is set by default. You can override this by setting the `LOG` and `LOG_FORMAT` environment variables.
+
+By default, `LOG` and `LOG_FORMAT` are set to `info` and `json` respectively.
+
+## Local Development
+
+We recommend using the following settings for local development:
 
 ```bash
-// Nothing! Production mode is set by default!
-// LOG=info LOG_FORMAT=json
-```
-
-## Example: Local Development
-
-```bash
-LOG=debug LOG_FORMAT=cli ts-node /path/to/app.ts
+LOG=debug LOG_FORMAT=cli node /path/to/app.js
 ```
 
 ## `LOG`
