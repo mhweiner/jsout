@@ -13,7 +13,9 @@
 A Syslog-compatible, small, and simple logger for Typescript/Javascript Node.js projects. Sponsored by [Aeroview](https://aeroview.io).
 
 **🔒 Structured Logs**
-- Supports both human-readable CLI output and JSON output for log aggregation into services like Sumo Logic, New Relic, Datadog, and Aeroview.
+- Supports both human-readable CLI output and JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/).
+- JSON output is structured and easy to parse, making it ideal for log aggregation and analysis.
+- Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a), for easy-to-read traces across multiple layers of your application.
 
 **✅ Syslog Compatible**
 
@@ -63,7 +65,7 @@ You can override these settings by setting the following environment variables b
 For example, here are the recommended settings when running your application locally:
 
 ```bash
-LOG=debug LOG_FORMAT=human ts-node /path/to/app.ts
+LOG=debug LOG_FORMAT=cli ts-node /path/to/app.ts
 ```
 
 ## `LOG`
@@ -78,7 +80,7 @@ For example, if the log level is set to `info`, logs with a level of `debug` wil
 
 _OR_
 
-`"crit"`, `"critical"` `"err"`, `"error"`, `"warning"`, `"warn"`, `"notice"`, `"info"`, `"debug"`
+`"critical"` `"error"`, `"warn"`, `"notice"`, `"info"`, `"debug"`
 
 **Default**: `"info"` (recommended for production)
 
@@ -86,7 +88,7 @@ _OR_
 
 Set the format for the output to either be human-readable (great for local development in the console), or JSON formatted (great for data aggregation on a server).
 
-**Possible values**: `"human"`, `"json"`
+**Possible values**: `"cli"`, `"json"`
 
 **Default**: `"json"` (recommended for production)
 
@@ -127,19 +129,16 @@ For those functions that accept error objects, the `error` object is automatical
 
 ## Critical/Fatal (2)
 
-- `logger.crit(message?: string, error?: any, data?: any)`
 - `logger.critical(message?: string, error?: any, data?: any)`
 - `logger.fatal(message?: string, error?: any, data?: any)`
 
 ## Error (3)
 
-- `logger.err(message?: string, error?: any, data?: any)`
 - `logger.error(message?: string, error?: any, data?: any)`
 
 ## Warning (4)
 
 - `logger.warn(message?: string, error?: any, data?: any)`
-- `logger.warning(message?: string, error?: any, data?: any)`
 
 ## Notice (5)
 

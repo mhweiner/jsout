@@ -1,7 +1,7 @@
 import kleur from 'kleur';
 import {LogLevel} from '.';
 
-export function colorizeLevel(level: LogLevel) {
+export function colorizeLevel(level: LogLevel): string {
 
     switch (level) {
 

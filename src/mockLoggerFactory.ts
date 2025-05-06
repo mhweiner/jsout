@@ -2,13 +2,10 @@
 const levelAliases: Record<string, string> = {
     emerg: 'critical',
     alert: 'critical',
-    crit: 'critical',
     critical: 'critical',
     fatal: 'critical',
-    err: 'error',
     error: 'error',
     warn: 'warning',
-    warning: 'warning',
     notice: 'notice',
     info: 'info',
     debug: 'debug',
@@ -16,12 +13,15 @@ const levelAliases: Record<string, string> = {
 
 export type Call = [level: string, message?: string, error?: any, data?: any];
 
+type MockLogger = Record<string, (...args: any[]) => void> & {
+    getCalls: () => Call[]
+};
+
 // eslint-disable-next-line max-lines-per-function
-export function mockLoggerFactory() {
+export function mockLoggerFactory(): MockLogger {
 
     const calls: Call[] = [];
-
-    const logger: Record<string, (...args: any[]) => void> = {
+    const logger: MockLogger = {
         getCalls: () => calls,
     };
 
@@ -30,7 +30,7 @@ export function mockLoggerFactory() {
 
         const level = levelAliases[alias];
 
-        logger[alias] = (msg?: string, maybeErr?: any, maybeData?: any) => {
+        logger[alias] = (msg?: string, maybeErr?: any, maybeData?: any): void => {
 
             const isErrorLevel = ['critical', 'error', 'warning'].includes(level);
 
@@ -43,8 +43,6 @@ export function mockLoggerFactory() {
 
     }
 
-    return logger as typeof logger & {
-        getCalls: () => Call[]
-    };
+    return logger;
 
 }

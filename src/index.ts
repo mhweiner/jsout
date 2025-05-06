@@ -26,8 +26,7 @@ export enum LogLevel {
 export enum LogFormat {
     json = 'json',
     cli = 'cli',
-    human = 'cli',
-    text = 'cli',
+    human = 'cli', // deprecated
 }
 
 if (process.env.LOG && !LogLevel[process.env.LOG as keyof typeof LogLevel]) {
@@ -43,34 +42,34 @@ const options: CliOptions = {
 const transport = stdio; // For now, we only have stdio transport
 
 export const logger = {
-    emerg: (message?: string, error?: any, data?: any) => log({
+    emerg: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.emerg, message, error, data, options, transport,
     }),
-    alert: (message?: string, error?: any, data?: any) => log({
+    alert: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.alert, message, error, data, options, transport,
     }),
-    critical: (message?: string, error?: any, data?: any) => log({
+    critical: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.critical, message, error, data, options, transport,
     }),
-    fatal: (message?: string, error?: any, data?: any) => log({
+    fatal: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.critical, message, error, data, options, transport,
     }),
-    error: (message?: string, error?: any, data?: any) => log({
+    error: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.critical, message, error, data, options, transport,
     }),
-    warn: (message?: string, error?: any, data?: any) => log({
+    warn: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.warn, message, error, data, options, transport,
     }),
-    notice: (message?: string, data?: any) => log({
+    notice: (message?: string, data?: any): void => log({
         level: LogLevel.notice, message, data, options, transport,
     }),
-    info: (message?: string, data?: any) => log({
+    info: (message?: string, data?: any): void => log({
         level: LogLevel.info, message, data, options, transport,
     }),
-    debug: (message?: string, data?: any) => log({
+    debug: (message?: string, data?: any): void => log({
         level: LogLevel.debug, message, data, options, transport,
     }),
 };
 
 export * from './log';
-export * from './fakeLoggerFactory';
+export * from './mockLoggerFactory';

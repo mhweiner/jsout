@@ -7,14 +7,14 @@ export function stub(): Stub {
 
     const calls: any[] = [];
 
-    const fn = (...args: any[]) => {
+    const fn = (...args: any[]): void => {
 
         calls.push(args);
 
     };
 
-    fn.getCalls = () => calls;
-    fn.clear = () => {
+    fn.getCalls = (): any[] => calls;
+    fn.clear = (): void => {
 
         calls.length = 0;
 
