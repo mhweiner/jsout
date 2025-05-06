@@ -1,5 +1,6 @@
 import util from 'node:util';
 import {MAX_DEPTH} from '..';
+import kleur from 'kleur';
 
 /**
  * Recursively formats an Error and its causes in a vertical, readable form.
@@ -43,7 +44,7 @@ export function prettyError(err: Error): string {
         // Follow cause if it exists
         if (current.cause instanceof Error) {
 
-            lines.push('↳ Caused by:');
+            lines.push(kleur.bold().bgWhite('↳ Caused by:'));
             current = current.cause;
 
         } else {
