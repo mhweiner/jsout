@@ -1,6 +1,8 @@
 import {log} from './log';
 import {stdio} from './transports';
 
+export const MAX_DEPTH = 10; // Maximum depth for util.inspect
+
 export type CliOptions = {
     level: LogLevel
     format: LogFormat
@@ -11,11 +13,8 @@ export enum LogLevel {
     alert = 1, // Action must be taken immediately  (Not for application use)
     fatal = 2, // The service is going to stop or become unusable. Unrecoverable error. Immediate attention required.
     critical = 2,
-    crit = 2,
-    err = 3, // Error condition. Requires attention.
-    error = 3,
+    error = 3, // Error condition. Requires attention.
     warn = 4, // Possible issue that could root cause a bug. Attention advised. If not an issue, demote to info/debug.
-    warning = 4,
     notice = 5, // Normal but significant condition. No action required.
     info = 6, // Detail on regular operation.
     debug = 7, // Anything else, i.e. too verbose to be included in "info" level. Not used in production.
@@ -26,7 +25,9 @@ export enum LogLevel {
  */
 export enum LogFormat {
     json = 'json',
-    human = 'human',
+    cli = 'cli',
+    human = 'cli',
+    text = 'cli',
 }
 
 if (process.env.LOG && !LogLevel[process.env.LOG as keyof typeof LogLevel]) {
@@ -39,43 +40,35 @@ const options: CliOptions = {
     level: LogLevel[process.env.LOG as keyof typeof LogLevel] || LogLevel.info,
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
 };
+const transport = stdio; // For now, we only have stdio transport
 
 export const logger = {
     emerg: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.emerg, message, error, data, options, transport: stdio,
+        level: LogLevel.emerg, message, error, data, options, transport,
     }),
     alert: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.alert, message, error, data, options, transport: stdio,
-    }),
-    crit: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.crit, message, error, data, options, transport: stdio,
+        level: LogLevel.alert, message, error, data, options, transport,
     }),
     critical: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.crit, message, error, data, options, transport: stdio,
+        level: LogLevel.critical, message, error, data, options, transport,
     }),
     fatal: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.crit, message, error, data, options, transport: stdio,
-    }),
-    err: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.err, message, error, data, options, transport: stdio,
+        level: LogLevel.critical, message, error, data, options, transport,
     }),
     error: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.err, message, error, data, options, transport: stdio,
+        level: LogLevel.critical, message, error, data, options, transport,
     }),
     warn: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.warn, message, error, data, options, transport: stdio,
-    }),
-    warning: (message?: string, error?: any, data?: any) => log({
-        level: LogLevel.warn, message, error, data, options, transport: stdio,
+        level: LogLevel.warn, message, error, data, options, transport,
     }),
     notice: (message?: string, data?: any) => log({
-        level: LogLevel.notice, message, data, options, transport: stdio,
+        level: LogLevel.notice, message, data, options, transport,
     }),
     info: (message?: string, data?: any) => log({
-        level: LogLevel.info, message, data, options, transport: stdio,
+        level: LogLevel.info, message, data, options, transport,
     }),
     debug: (message?: string, data?: any) => log({
-        level: LogLevel.debug, message, data, options, transport: stdio,
+        level: LogLevel.debug, message, data, options, transport,
     }),
 };
 
