@@ -55,7 +55,14 @@ Configuration is set through environment variables. By default, the logger is se
 
 You can override these settings by setting the following environment variables before running your application.
 
-For example, here are the recommended settings when running your application locally:
+## Example: Production
+
+```bash
+// Nothing! Production mode is set by default!
+// LOG=info LOG_FORMAT=json
+```
+
+## Example: Local Development
 
 ```bash
 LOG=debug LOG_FORMAT=cli ts-node /path/to/app.ts
