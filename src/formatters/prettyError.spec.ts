@@ -32,9 +32,9 @@ test('prints custom fields on error', (assert) => {
 
     assert.equal(out, [
         'CustomError: Something broke',
-        '  code: \'E_FAIL\'',
-        '  meta: { id: 123 }',
         '  [stack]',
+        'code: \'E_FAIL\'',
+        'meta: { id: 123 }',
     ].join('\n'));
 
 });

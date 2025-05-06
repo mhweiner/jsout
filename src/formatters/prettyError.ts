@@ -15,18 +15,6 @@ export function prettyError(err: Error): string {
         // Print error header
         lines.push(`${current.name}: ${current.message}`);
 
-        // Include all custom fields (excluding standard ones)
-        const standard = new Set(['name', 'message', 'stack', 'cause']);
-        const keys = Object.getOwnPropertyNames(current).filter((key) => !standard.has(key));
-
-        for (const key of keys) {
-
-            const val = (current as any)[key];
-
-            lines.push(`  ${key}: ${util.inspect(val, {colors: true, depth: MAX_DEPTH})}`);
-
-        }
-
         // Print stack trace (excluding the first line which is just the message)
         if (current.stack) {
 
@@ -37,6 +25,18 @@ export function prettyError(err: Error): string {
                 lines.push(`  ${line.trim()}`);
 
             }
+
+        }
+
+        // Include all custom fields (excluding standard ones)
+        const standard = new Set(['name', 'message', 'stack', 'cause']);
+        const keys = Object.getOwnPropertyNames(current).filter((key) => !standard.has(key));
+
+        for (const key of keys) {
+
+            const val = (current as any)[key];
+
+            lines.push(`${key}: ${util.inspect(val, {colors: true, depth: MAX_DEPTH})}`);
 
         }
 
