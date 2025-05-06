@@ -181,21 +181,15 @@ Logs should be emitted to `STDOUT` and `STDERR` for a few reasons:
 
 4. **Simplified Deployment and Management**: Emitting logs to STDOUT and STDERR simplifies deployment and management processes. Applications do not need to be configured with complex logging libraries or dependencies, reducing the risk of configuration errors and simplifying the deployment pipeline. This also aligns well with containerized environments (e.g., Docker), where standard streams are commonly used for log collection and monitoring.
 
-# Support, Feedback, and Contributions 
+## Contributing
 
-- Star this repo if you like it!
-- Submit an [issue](https://github.com/mhweiner/jsout/issues) with your problem, feature request or bug report
-- Issue a PR against `main` and request review. Make sure all tests pass and coverage is good.
-- Write about `jsout` in your blog, tweet about it, or share it with your friends!
+- ⭐ Star this repo if you like it!
+- 🐛 Open an [issue](https://github.com/mhweiner/jsout/issues) for bugs or suggestions.
+- 🤝 Submit a PR to `main` — all tests must pass.
 
-Together we can make software more reliable and easier to maintain!
+## Related Projects
 
-# Sponsors
-
-<picture>
-    <source srcset="docs/aeroview-logo-lockup.svg" media="(prefers-color-scheme: dark)">
-    <source srcset="docs/aeroview-logo-lockup-dark.svg" media="(prefers-color-scheme: light)">
-    <img src="docs/aeroview-logo-lockup-dark.svg" alt="Logo" style="max-width: 150px;margin: 0 0 10px">
-</picture>
-
-Aeroview is a developer-friendly, AI-powered observability platform that helps you monitor, troubleshoot, and optimize your applications. Get started for free at [https://aeroview.io](https://aeroview.io).
+- [autorel](https://github.com/mhweiner/autorel): Automate semantic releases based on conventional commits.
+- [hoare](https://github.com/mhweiner/hoare): A fast, defensive test runner for JS/TS.
+- [brek](https://github.com/mhweiner/brek): Typed config loader for dynamic, secret-based configs.
+- [pgsmith](https://github.com/mhweiner/pgsmith): A SQL builder for parameterized queries in PostgreSQL.
