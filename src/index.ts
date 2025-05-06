@@ -55,7 +55,7 @@ export const logger = {
         level: LogLevel.critical, message, error, data, options, transport,
     }),
     error: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.critical, message, error, data, options, transport,
+        level: LogLevel.error, message, error, data, options, transport,
     }),
     warn: (message?: string, error?: any, data?: any): void => log({
         level: LogLevel.warn, message, error, data, options, transport,
