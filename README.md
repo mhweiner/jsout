@@ -51,17 +51,9 @@ logger.error('', new Error('test')); //infers "test" as message
 
 # Configuration
 
-Configuration is set through environment variables. By default, the logger is set to `info` level and `json` format, which is recommended for production.
+Configuration is set through environment variables. 
 
-You can override these settings by setting the following environment variables before running your application.
-
-## Production
-
-Recommended settings for production is set by default. You can override this by setting the `LOG` and `LOG_FORMAT` environment variables.
-
-By default, `LOG` and `LOG_FORMAT` are set to `info` and `json` respectively.
-
-## Local Development
+By default, the logger is set to `info` level and `json` format, which is recommended for production.
 
 We recommend using the following settings for local development:
 
