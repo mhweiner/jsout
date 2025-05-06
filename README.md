@@ -18,17 +18,16 @@ A Syslog-compatible, small, and simple logger for Typescript/Javascript Node.js 
 - Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output format make it easy to integrate with existing logging pipelines and 3rd party services.
 
 **🛡 Defensive & Devops Friendly**
-- Logs are enabled in production mode by default, avoding the mistake of forgetting to enable logs in production which could be disastrous.
+- Logs are set to production mode by default for safety
 - Transport should be handled [outside of the process](#why-should-logs-use-stdout-and-stderr) via `STDOUT` and `STDERR`
 - Simple configurations makes it hard to mess up
 - Minimal dependencies, fast, and reliable TypeScript codebase
-- Easily set configuration using simple CLI overrides
-- Simple and well-defined enough to build custom tooling around, such as plugins, custom error handling, and logging pipelines.
+- Powerful CLI overrides without polluting the codebase or environment
 
 **😃 Simple & Easy to Use**
 - Automatic Error serialization
 - Out-of-the-box Typescript support
-- Very nice human readable output
+- Colorized, formatted human-readable output for local development
 
 # Installation
 
