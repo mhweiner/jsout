@@ -4,7 +4,8 @@ import * as mod from './log';
 import {log} from './log';
 import {stub} from './lib/stub';
 import {serializeError} from './serializeError';
-import {normalizeError} from './lib/normalizeError';
+import {normalizeLogOutput} from './lib/normalizeLogOutput';
+import {inspect} from 'util';
 
 test('debug/debug/json/nomessage/nodata', (assert) => {
 
@@ -61,11 +62,10 @@ test('info/info/human', (assert) => {
     // then
     assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
     assert.equal(
-        stdoutStub.getCalls()[0][0],
-        '\n'
-        + 'Level: \x1B[1m\x1B[37mINFO\x1B[22m\x1B[39m\n'
+        normalizeLogOutput(stdoutStub.getCalls()[0][0]),
+        'Level: INFO\n'
         + 'Message: hello world\n'
-        + '{ data: \x1B[32m\'data\'\x1B[39m }\n'
+        + `${inspect({data: 'data'})}`
     );
 
 });
@@ -265,7 +265,7 @@ test('cli format with error', (assert) => {
     // then
     assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
     assert.equal(
-        normalizeError(stderrStub.getCalls()[0][0]),
+        normalizeLogOutput(stderrStub.getCalls()[0][0]),
         'Level: ERROR\n'
         + 'Message: my b\n'
         + 'Error: my b\n  [stack]'

@@ -1,11 +1,11 @@
 import {test} from 'hoare';
 import {prettyError} from './prettyError';
-import {normalizeError} from '../lib/normalizeError';
+import {normalizeLogOutput} from '../lib/normalizeLogOutput';
 
 test('prints a simple error with stack', (assert) => {
 
     const err = new Error('Something went wrong');
-    const out = normalizeError(prettyError(err));
+    const out = normalizeLogOutput(prettyError(err));
 
     assert.equal(out, [
         'Error: Something went wrong',
@@ -28,7 +28,7 @@ test('prints custom fields on error', (assert) => {
     }
 
     const err = new CustomError('Something broke');
-    const out = normalizeError(prettyError(err));
+    const out = normalizeLogOutput(prettyError(err));
 
     assert.equal(out, [
         'CustomError: Something broke',
@@ -45,7 +45,7 @@ test('prints cause chain in flat format', (assert) => {
     const mid = new Error('Mid failure', {cause: low});
     const top = new Error('Top failure', {cause: mid});
 
-    const out = normalizeError(prettyError(top));
+    const out = normalizeLogOutput(prettyError(top));
 
     assert.equal(out, [
         'Error: Top failure',

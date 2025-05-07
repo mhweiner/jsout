@@ -4,7 +4,7 @@
  * - Collapses stack traces into a single line
  * - Trims leading and trailing whitespace
  */
-export function normalizeError(output: string): string {
+export function normalizeLogOutput(output: string): string {
 
     return output
         // eslint-disable-next-line no-control-regex
