@@ -1,6 +1,6 @@
 import util from 'node:util';
 import {MAX_DEPTH} from '..';
-import kleur from 'kleur';
+import {bold, bgGreenBright, black, whiteBright, dim} from 'colorette';
 
 /**
  * Recursively formats an Error and its causes in a vertical, readable form.
@@ -14,7 +14,7 @@ export function prettyError(err: Error): string {
     while (current instanceof Error) {
 
         // Print error header
-        lines.push(`${current.name}: ${current.message}`);
+        lines.push(bold(whiteBright(`${current.name}: ${current.message}`)));
 
         // Print stack trace (excluding the first line which is just the message)
         if (current.stack) {
@@ -23,7 +23,7 @@ export function prettyError(err: Error): string {
 
             for (const line of stackLines) {
 
-                lines.push(`  ${line.trim()}`);
+                lines.push(dim(`  ${line.trim()}`));
 
             }
 
@@ -44,7 +44,7 @@ export function prettyError(err: Error): string {
         // Follow cause if it exists
         if (current.cause instanceof Error) {
 
-            lines.push(kleur.bold().bgWhite('↳ Caused by:'));
+            lines.push(black(bgGreenBright('↳ Caused by:')));
             current = current.cause;
 
         } else {

@@ -1,26 +1,26 @@
-import kleur from 'kleur';
 import {LogLevel} from '.';
+import {bold, gray, white, yellowBright, redBright, bgRedBright} from 'colorette';
 
 export function colorizeLevel(level: LogLevel): string {
 
     switch (level) {
 
         case LogLevel.debug:
-            return kleur.bold().grey('DEBUG');
+            return bold(gray('DEBUG'));
         case LogLevel.info:
-            return kleur.bold().white('INFO');
+            return bold(white('INFO'));
         case LogLevel.notice:
-            return kleur.bold().white('NOTICE');
+            return bold(white('NOTICE'));
         case LogLevel.warn:
-            return kleur.bold().yellow('WARN');
+            return bold(yellowBright('WARN'));
         case LogLevel.error:
-            return kleur.bold().red('ERROR');
+            return bold(redBright('ERROR'));
         case LogLevel.fatal:
-            return kleur.bold().white().bgRed('FATAL');
+            return bold(white(bgRedBright('FATAL')));
         case LogLevel.alert:
-            return kleur.bold().white().bgRed('ALERT');
+            return bold(white(bgRedBright('ALERT')));
         case LogLevel.emerg:
-            return kleur.bold().white().bgRed('EMERG');
+            return bold(white(bgRedBright('EMERG')));
 
     }
 

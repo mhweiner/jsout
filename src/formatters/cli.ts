@@ -3,12 +3,13 @@ import {colorizeLevel} from '../colorizeLevel';
 import {LogEvent} from '../log';
 import util from 'node:util';
 import {prettyError} from './prettyError';
+import {bold, white} from 'colorette';
 
 export function formatCli(log: LogEvent): string {
 
     const insp = (obj: any): string => util.inspect(obj, {colors: true, depth: MAX_DEPTH});
-    const level = `Level: ${colorizeLevel(log.level)}\n`;
-    const message = `Message: ${log.message}\n`;
+    const level = `${bold(white('Level'))}: ${colorizeLevel(log.level)}\n`;
+    const message = `${bold(white(`Message: ${log.message}`))}\n`;
     const error = cliFormatError(log.error);
     const data = log.data ? `${insp(log.data)}\n` : '';
 
