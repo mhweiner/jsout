@@ -2,7 +2,7 @@
     <source srcset="docs/jsout.svg" media="(prefers-color-scheme: dark)">
     <source srcset="docs/jsout-dark.svg" media="(prefers-color-scheme: light)">
     <img src="docs/jsout-dark.svg" alt="Logo" style="margin: 0 0 10px" size="250">
-</picture> 
+</picture>
 
 [![build status](https://github.com/mhweiner/jsout/actions/workflows/release.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
