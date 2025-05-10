@@ -16,6 +16,8 @@ A Syslog-compatible, simple, structured logging tool for Node.js projects. Spons
     <img src="docs/error-screenshot.svg" alt="Screenshot of error">
 </picture>
 
+## Features
+
 **🔒 Syslog Compatible Structured Logs**
 - Supports both human-readable CLI output and JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/)
 - Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a) for error chaining/traces across layers of your application
