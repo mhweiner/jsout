@@ -4,6 +4,7 @@ import {LogEvent} from '../log';
 import util from 'node:util';
 import {prettyError} from './prettyError';
 import {bold, white} from 'colorette';
+import {serializeError} from '../serializeError';
 
 export function formatCli(log: LogEvent): string {
 
@@ -20,7 +21,7 @@ export function formatCli(log: LogEvent): string {
 function cliFormatError(error: any): string {
 
     if (!error) return '';
-    if (error instanceof Error) return prettyError(error);
+    if (error instanceof Error) return prettyError(serializeError(error));
     if (typeof error === 'string') return error;
     if (typeof error === 'object') return util.inspect(error, {colors: true, depth: MAX_DEPTH});
 

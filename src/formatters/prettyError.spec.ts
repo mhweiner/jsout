@@ -1,10 +1,20 @@
+/* eslint-disable max-lines-per-function */
 import {test} from 'hoare';
 import {prettyError} from './prettyError';
 import {normalizeLogOutput} from '../lib/normalizeLogOutput';
+import {SerializedError} from '..';
 
 test('prints a simple error with stack', (assert) => {
 
-    const err = new Error('Something went wrong');
+    const err: SerializedError = {
+        name: 'Error',
+        message: 'Something went wrong',
+        stack: [
+            'at Object.<anonymous> (/path/to/file.js:1:1)',
+            'at Module._compile (node:internal/modules/cjs/loader:1210:14)',
+            'at node:internal/modules/cjs/loader:1274:32',
+        ],
+    };
     const out = normalizeLogOutput(prettyError(err));
 
     assert.equal(out, [
@@ -16,22 +26,21 @@ test('prints a simple error with stack', (assert) => {
 
 test('prints custom fields on error', (assert) => {
 
-    class CustomError extends Error {
-
-        constructor(message: string, public code = 'E_FAIL', public meta = {id: 123}) {
-
-            super(message);
-            this.name = 'CustomError';
-
-        }
-
-    }
-
-    const err = new CustomError('Something broke');
+    const err: SerializedError = {
+        name: 'CustomError',
+        message: 'Ooops',
+        stack: [
+            'at Object.<anonymous> (/path/to/file.js:1:1)',
+            'at Module._compile (node:internal/modules/cjs/loader:1210:14)',
+            'at node:internal/modules/cjs/loader:1274:32',
+        ],
+        code: 'E_FAIL',
+        meta: {id: 123},
+    };
     const out = normalizeLogOutput(prettyError(err));
 
     assert.equal(out, [
-        'CustomError: Something broke',
+        'CustomError: Ooops',
         '  [stack]',
         'code: \'E_FAIL\'',
         'meta: { id: 123 }',
@@ -41,20 +50,48 @@ test('prints custom fields on error', (assert) => {
 
 test('prints cause chain in flat format', (assert) => {
 
-    const low = new Error('Root cause');
-    const mid = new Error('Mid failure', {cause: low});
-    const top = new Error('Top failure', {cause: mid});
+    const foo: SerializedError = {
+        name: 'Error',
+        message: 'Foo',
+        stack: [
+            'at Object.<anonymous> (/path/to/file.js:1:1)',
+            'at Module._compile (node:internal/modules/cjs/loader:1210:14)',
+            'at node:internal/modules/cjs/loader:1274:32',
+        ],
+    };
+    const bar: SerializedError = {
+        name: 'Error',
+        message: 'Bar',
+        stack: [
+            'at Object.<anonymous> (/path/to/file.js:1:1)',
+            'at Module._compile (node:internal/modules/cjs/loader:1210:14)',
+            'at node:internal/modules/cjs/loader:1274:32',
+        ],
+    };
+    const baz: SerializedError = {
+        name: 'Error',
+        message: 'Baz',
+        stack: [
+            'at Object.<anonymous> (/path/to/file.js:1:1)',
+            'at Module._compile (node:internal/modules/cjs/loader:1210:14)',
+            'at node:internal/modules/cjs/loader:1274:32',
+        ],
+    };
 
-    const out = normalizeLogOutput(prettyError(top));
+    // Chain them together
+    foo.cause = bar;
+    bar.cause = baz;
+
+    const out = normalizeLogOutput(prettyError(foo));
 
     assert.equal(out, [
-        'Error: Top failure',
+        'Error: Foo',
         '  [stack]',
         '↳ Caused by:',
-        'Error: Mid failure',
+        'Error: Bar',
         '  [stack]',
         '↳ Caused by:',
-        'Error: Root cause',
+        'Error: Baz',
         '  [stack]',
     ].join('\n'));
 

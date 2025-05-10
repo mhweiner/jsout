@@ -20,6 +20,14 @@ export enum LogLevel {
     debug = 7, // Anything else, i.e. too verbose to be included in "info" level. Not used in production.
 }
 
+export type SerializedError = {
+    name: string
+    message: string
+    stack?: string[]
+    cause?: SerializedError
+    [key: string]: any
+};
+
 /**
  * Set with process.env.LOG_FORMAT
  */
