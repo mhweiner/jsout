@@ -18,22 +18,21 @@ A Syslog-compatible, simple, structured logging tool for Node.js projects. Spons
 
 ## Features
 
-**🔒 Syslog Compatible Structured Logs**
-- Supports both human-readable CLI output and JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/)
-- Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a) for error chaining/traces across layers of your application
-- Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output format make it easy to integrate with existing logging pipelines and 3rd party services
-
 **😃 Built for developer happiness & productivity**
 - Automatic Error serialization
 - Colorized, formatted human-readable output for local development
-- Out-of-the-box Typescript support
+- Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a) for error chaining/traces across layers of your application
+
+**🔒 Syslog Compatible Structured Logs**
+- JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/)
+- Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output
 
 **🛡 Defensive & DevOps Friendly**
 - Production settings by default for safety
 - Transport handled [outside of the process via `stdout` and `stderr`](#why-should-logs-use-stdout-and-stderr)
 - Easy to use and simple configuration
 - Only 1 small dependency. Fast & reliable TypeScript codebase
-- Excellent test coverage (>90%) with CI/CD pipeline
+- Excellent test coverage (>90%)
 
 ## Installation
 
