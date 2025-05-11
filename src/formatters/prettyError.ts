@@ -1,6 +1,6 @@
 import util from 'node:util';
 import {MAX_DEPTH, SerializedError} from '..';
-import {bold, bgGreenBright, black, whiteBright, dim} from 'colorette';
+import {bold, bgGreenBright, black, whiteBright, gray} from 'colorette';
 
 /**
  * Formats a serialized error (from serializeError) into human-readable text.
@@ -20,7 +20,7 @@ export function prettyError(err: SerializedError): string {
 
             for (const line of current.stack.slice(1)) {
 
-                lines.push(dim(`  ${line.trim()}`));
+                lines.push(gray(`  ${line.trim()}`));
 
             }
 

@@ -1,3 +1,5 @@
+const standardKeys = new Set(['name', 'message', 'stack', 'cause']);
+
 /**
  * Recursively serializes an Error into a plain object,
  * preserving standard fields, cause chains, and custom properties.
@@ -13,24 +15,23 @@ export function serializeError(err: any, depth = 0, maxDepth = 10): any {
         stack: err.stack?.split('\n'),
     };
 
-    const standardKeys = new Set(['name', 'message', 'stack', 'cause']);
-
     // Copy custom properties (e.g. `status`, `meta`, etc.)
-    for (const key of Object.getOwnPropertyNames(err)) {
+    if ((err as any).toJSON) {
 
-        if (!standardKeys.has(key)) {
+        try {
 
-            try {
+            // Use `toJSON` if available
+            Object.assign(out, (err as any).toJSON());
 
-                out[key] = safeRepr((err as any)[key], maxDepth - depth);
+        } catch (e) {
 
-            } catch {
-
-                out[key] = '[Unserializable]';
-
-            }
+            Object.assign(out, extractCustomProps(err, depth, maxDepth));
 
         }
+
+    } else {
+
+        Object.assign(out, extractCustomProps(err, depth, maxDepth));
 
     }
 
@@ -48,7 +49,7 @@ export function serializeError(err: any, depth = 0, maxDepth = 10): any {
 /**
  * Safely serializes an arbitrary value with depth and cycle protection.
  */
-function safeRepr(value: any, maxDepth = 10): any {
+function safeSerializeValue(value: any, maxDepth = 10): any {
 
     return limitDepth(value, 0, maxDepth, new WeakSet());
 
@@ -73,19 +74,7 @@ function limitDepth(
 
     if (Array.isArray(obj)) {
 
-        return obj.map((item) => {
-
-            try {
-
-                return limitDepth(item, currentDepth + 1, maxDepth, seen);
-
-            } catch {
-
-                return '[Unserializable]';
-
-            }
-
-        });
+        return obj.map((item) => limitDepth(item, currentDepth + 1, maxDepth, seen));
 
     }
 
@@ -106,5 +95,30 @@ function limitDepth(
     }
 
     return result;
+
+}
+
+function extractCustomProps(err: any, depth: number, maxDepth: number): Record<string, any> {
+
+    const customValues: Record<string, any> = {};
+
+    for (const key of Object.getOwnPropertyNames(err)) {
+
+        if (!standardKeys.has(key)) {
+
+            try {
+
+                customValues[key] = safeSerializeValue((err as any)[key], maxDepth - depth);
+
+            } catch {
+
+                customValues[key] = '[Unserializable]';
+
+            }
+
+        }
+
+    }
+    return customValues;
 
 }

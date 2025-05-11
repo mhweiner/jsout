@@ -195,7 +195,7 @@ test('triggers serializeError catch for top-level property access', (assert) => 
 
 });
 
-test('hits limitDepth catch block directly on property access', (assert) => {
+test('handles getters that throw during serialization gracefully', (assert) => {
 
     const throwing = {};
 
@@ -215,5 +215,104 @@ test('hits limitDepth catch block directly on property access', (assert) => {
     const out = serializeError(err);
 
     assert.equal(out.meta.bad, '[Unserializable]');
+
+});
+
+test('calls .toJSON() if defined', (assert) => {
+
+    class Response extends Error {
+
+        constructor(msg: string, public status = 403, public meta = {reason: 'denied'}) {
+
+            super(msg);
+            this.name = 'Response';
+
+        }
+
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        toJSON() {
+
+            return {
+                toJSON: 'wascalled!',
+            };
+
+        }
+
+    }
+    const err = new Response('Access denied');
+    const out = serializeError(err);
+
+    assert.equal({...out, stack: '[stack removed]'}, {
+        name: 'Response',
+        message: 'Access denied',
+        stack: '[stack removed]',
+        toJSON: 'wascalled!',
+    });
+
+});
+
+test('handles .toJSON() failure gracefully by using normal fallback', (assert) => {
+
+    class Response extends Error {
+
+        constructor(msg: string, public status = 403, public meta = {reason: 'denied'}) {
+
+            super(msg);
+            this.name = 'Response';
+
+        }
+
+        // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+        toJSON() {
+
+            throw new Error('💥 trapdoor');
+
+        }
+
+    }
+    const err = new Response('Access denied');
+    const out = serializeError(err);
+
+    assert.equal({...out, stack: '[stack removed]'}, {
+        name: 'Response',
+        message: 'Access denied',
+        status: 403,
+        meta: {reason: 'denied'},
+        stack: '[stack removed]',
+    });
+
+});
+
+test('catches error during array item serialization in limitDepth', (assert) => {
+
+    const err = new Error('bad array');
+    const badItem = {
+        get ok(): boolean {
+
+            // This property is fine
+            return true;
+
+        },
+    };
+
+    // Force failure when accessing a property inside limitDepth
+    Object.defineProperty(badItem, 'oops', {
+        enumerable: true,
+        get() {
+
+            throw new Error('💥 recursive trap');
+
+        },
+    });
+
+    (err as any).array = [1, badItem];
+
+    const out = serializeError(err);
+
+    assert.equal(out.array[0], 1);
+    assert.equal(out.array[1], {
+        ok: true,
+        oops: '[Unserializable]',
+    });
 
 });
