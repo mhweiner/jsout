@@ -20,6 +20,7 @@ A Syslog-compatible, simple, structured logging tool for Node.js projects. Spons
 
 **😃 Built for developer happiness & productivity**
 - Automatic Error serialization
+- Automatically removes noisy internal stack traces such as `node:internal/...`
 - Colorized, formatted human-readable output for local development
 - Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a) for error chaining/traces across layers of your application
 

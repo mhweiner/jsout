@@ -4,8 +4,7 @@ import * as mod from './log';
 import {log} from './log';
 import {stub} from './lib/stub';
 import {serializeError} from './serializeError';
-import {normalizeLogOutput} from './lib/normalizeLogOutput';
-import {inspect} from 'util';
+import {stripAnsiColors} from './lib/stripAnsiColors';
 
 test('debug/debug/json/nomessage/nodata', (assert) => {
 
@@ -46,7 +45,7 @@ test('info/info/human', (assert) => {
         level: LogLevel.info,
         options: {
             level: LogLevel.info,
-            format: LogFormat.human,
+            format: LogFormat.cli,
         },
         transport: {
             stdout: stdoutStub,
@@ -62,10 +61,10 @@ test('info/info/human', (assert) => {
     // then
     assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
     assert.equal(
-        normalizeLogOutput(stdoutStub.getCalls()[0][0]),
+        stripAnsiColors(stdoutStub.getCalls()[0][0]),
         'Level: INFO\n'
         + 'Message: hello world\n'
-        + `${inspect({data: 'data'})}`
+        + '{ data: \'data\' }\n',
     );
 
 });
@@ -244,7 +243,10 @@ test('cli format with error', (assert) => {
     // given
     const stderrStub = stub();
     const stdoutStub = stub();
-    const fakeErr = new Error('my b');
+    const error = new Error('my b');
+
+    // replace stack with fake stack
+    error.stack = 'Error: my b\n  at foo.ts:1:1';
 
     const input: mod.LogInput = {
         level: LogLevel.error,
@@ -256,7 +258,7 @@ test('cli format with error', (assert) => {
             stdout: stdoutStub,
             stderr: stderrStub,
         },
-        error: fakeErr,
+        error,
     };
 
     // when
@@ -265,10 +267,13 @@ test('cli format with error', (assert) => {
     // then
     assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
     assert.equal(
-        normalizeLogOutput(stderrStub.getCalls()[0][0]),
-        'Level: ERROR\n'
-        + 'Message: my b\n'
-        + 'Error: my b\n  [stack]'
+        stripAnsiColors(stderrStub.getCalls()[0][0]),
+        [
+            'Level: ERROR',
+            'Message: my b',
+            'Error: my b',
+            '  at foo.ts:1:1',
+        ].join('\n'),
     );
 
 });

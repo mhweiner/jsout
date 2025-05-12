@@ -2,6 +2,8 @@ import {LogLevel, LogFormat} from '.';
 import {Transport} from './transports';
 import {formatCli} from './formatters/cli';
 import {formatJson} from './formatters/json';
+import {serializeCustomProps} from './serializeCustomProps';
+import {serializeError} from './serializeError';
 
 export type LogInput = {
     level: LogLevel
@@ -37,8 +39,10 @@ export function log(input: LogInput): void {
     const log: LogEvent = {
         level,
         message: message ?? (error as any)?.message ?? '',
-        error,
-        data,
+        error: error instanceof Error
+            ? serializeError(error)
+            : serializeCustomProps(error),
+        data: serializeCustomProps(data),
     };
 
     const transport = log.level <= LogLevel.warn
