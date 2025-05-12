@@ -8,7 +8,7 @@ import {serializeCustomProps} from './serializeCustomProps';
  */
 export function serializeError(err: Error, depth = 0, maxDepth = 7): SerializedError {
 
-    // Seerialize standard Error properties
+    // Serialize standard Error properties
     const out: any = {
         name: err.name,
         message: err.message,

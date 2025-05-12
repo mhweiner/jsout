@@ -69,3 +69,29 @@ test('formatCli: POJO error', (assert) => {
     ].join('\n'));
 
 });
+
+test('formatCli: omits data block if no data', (assert) => {
+
+    const err: SerializedError = {
+        name: 'Error',
+        message: 'my b',
+        stack: [
+            'Error: by b',
+            '/app/src/foo.ts:1:1',
+        ],
+    };
+    const log = {
+        level: 3,
+        message: 'A custom message',
+        error: err,
+    };
+    const out = stripAnsiColors(formatCli(log));
+
+    assert.equal(out, [
+        'Level: ERROR',
+        'Message: A custom message',
+        'Error: my b',
+        '  at /app/src/foo.ts:1:1',
+    ].join('\n'));
+
+});

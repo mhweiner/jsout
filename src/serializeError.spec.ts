@@ -128,3 +128,38 @@ test('omits internal frames and other common junk from the stack', (assert) => {
     });
 
 });
+
+test('errors without stack traces return empty array as stack', (assert) => {
+
+    const err = new Error('Something went wrong');
+
+    // replace stack with a placeholder
+    err.stack = undefined;
+
+    const out = serializeError(err);
+
+    assert.equal(out, {
+        name: 'Error',
+        message: 'Something went wrong',
+        stack: [],
+    });
+
+});
+
+test('errors without stack traces return empty array as stack', (assert) => {
+
+    const err = new Error('Something went wrong');
+
+    // replace stack with a placeholder
+    err.stack = undefined;
+
+    const out = serializeError(err);
+
+    assert.equal(out, {
+        name: 'Error',
+        message: 'Something went wrong',
+        stack: [],
+    });
+
+});
+
