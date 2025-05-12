@@ -1,11 +1,11 @@
 import util from 'node:util';
-import {MAX_DEPTH, SerializedError} from '..';
+import {SerializedError} from '..';
 import {bold, bgGreenBright, black, whiteBright, gray} from 'colorette';
 
 /**
  * Formats a serialized error (from serializeError) into human-readable text.
  */
-export function prettyError(err: SerializedError): string {
+export function formatSerializedError(err: SerializedError): string {
 
     const lines: string[] = [];
     let current: SerializedError | undefined = err;
@@ -16,26 +16,19 @@ export function prettyError(err: SerializedError): string {
         lines.push(bold(whiteBright(`${current.name}: ${current.message}`)));
 
         // Stack trace
-        if (Array.isArray(current.stack)) {
+        for (const line of current.stack.slice(1)) {
 
-            for (const line of current.stack.slice(1)) {
-
-                lines.push(gray(`  ${line.trim()}`));
-
-            }
+            lines.push(gray(`  at ${line.trim()}`));
 
         }
 
         // Custom fields
-        const standard = new Set(['name', 'message', 'stack', 'cause']);
-
         for (const key of Object.keys(current)) {
 
-            if (!standard.has(key)) {
+            // Skip standard fields
+            if (key === 'name' || key === 'message' || key === 'stack' || key === 'cause') continue;
 
-                lines.push(`${key}: ${util.inspect(current[key], {colors: true, depth: MAX_DEPTH})}`);
-
-            }
+            lines.push(`${key}: ${util.inspect(current[key], {colors: true, depth: null})}`);
 
         }
 
@@ -51,5 +44,16 @@ export function prettyError(err: SerializedError): string {
     }
 
     return lines.join('\n');
+
+}
+
+export function isSerializedError(obj: any): obj is SerializedError {
+
+    return obj
+        && !(obj instanceof Error)
+        && typeof obj === 'object'
+        && 'message' in obj
+        && 'stack' in obj
+        && Array.isArray(obj.stack);
 
 }

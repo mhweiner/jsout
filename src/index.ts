@@ -1,8 +1,6 @@
 import {log} from './log';
 import {stdio} from './transports';
 
-export const MAX_DEPTH = 10; // Maximum depth for util.inspect
-
 export type CliOptions = {
     level: LogLevel
     format: LogFormat
@@ -23,7 +21,7 @@ export enum LogLevel {
 export type SerializedError = {
     name: string
     message: string
-    stack?: string[]
+    stack: string[]
     cause?: SerializedError
     [key: string]: any
 };

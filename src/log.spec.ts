@@ -1,18 +1,16 @@
+/* eslint-disable max-lines-per-function */
 import {test} from 'hoare';
 import {LogLevel, LogFormat} from '.';
-import * as mod from './log';
 import {log} from './log';
 import {stub} from './lib/stub';
-import {serializeError} from './serializeError';
-import {normalizeLogOutput} from './lib/normalizeLogOutput';
-import {inspect} from 'util';
+import {stripAnsiColors} from './lib/stripAnsiColors';
 
-test('debug/debug/json/nomessage/nodata', (assert) => {
+test('logs debug to stdout in json format', (assert) => {
 
-    // given
     const stderrStub = stub();
     const stdoutStub = stub();
-    const opts: mod.LogInput = {
+
+    log({
         level: LogLevel.debug,
         options: {
             level: LogLevel.debug,
@@ -22,31 +20,32 @@ test('debug/debug/json/nomessage/nodata', (assert) => {
             stdout: stdoutStub,
             stderr: stderrStub,
         },
-    };
-
-    // when
-    log(opts);
+        message: 'hello world',
+        data: {data: 'data'},
+    });
 
     // then
-    assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
     assert.equal(
         stdoutStub.getCalls()[0][0],
-        JSON.stringify({level: LogLevel.debug, message: ''}),
-        'stdout should be called with expected data'
+        JSON.stringify({
+            level: LogLevel.debug,
+            message: 'hello world',
+            data: {data: 'data'},
+        }),
     );
 
 });
 
-test('info/info/human', (assert) => {
+test('logs json info to stdout in cli format', (assert) => {
 
-    // given
     const stderrStub = stub();
     const stdoutStub = stub();
-    const opts: mod.LogInput = {
+
+    log({
         level: LogLevel.info,
         options: {
             level: LogLevel.info,
-            format: LogFormat.human,
+            format: LogFormat.cli,
         },
         transport: {
             stdout: stdoutStub,
@@ -54,93 +53,26 @@ test('info/info/human', (assert) => {
         },
         data: {data: 'data'},
         message: 'hello world',
-    };
+    });
 
-    // when
-    log(opts);
-
-    // then
-    assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
     assert.equal(
-        normalizeLogOutput(stdoutStub.getCalls()[0][0]),
+        stripAnsiColors(stdoutStub.getCalls()[0][0]),
         'Level: INFO\n'
         + 'Message: hello world\n'
-        + `${inspect({data: 'data'})}`
+        + '{ data: \'data\' }',
     );
 
 });
 
-test('notice/notice/json/message/nodata', (assert) => {
+test('log levels higher than options.level are ignored', (assert) => {
 
-    // given
     const stderrStub = stub();
     const stdoutStub = stub();
-    const opts: mod.LogInput = {
-        level: LogLevel.notice,
-        options: {
-            level: LogLevel.notice,
-            format: LogFormat.json,
-        },
-        transport: {
-            stdout: stdoutStub,
-            stderr: stderrStub,
-        },
-        message: 'hello world',
-    };
 
-    // when
-    log(opts);
-
-    // then
-    assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
-    assert.equal(
-        stdoutStub.getCalls()[0][0],
-        JSON.stringify({level: LogLevel.notice, message: 'hello world'}),
-        'stdout should be called with expected data'
-    );
-
-});
-
-test('emerg/emerg/json/nomessage/data', (assert) => {
-
-    // given
-    const stderrStub = stub();
-    const stdoutStub = stub();
-    const opts: mod.LogInput = {
-        level: LogLevel.emerg,
-        options: {
-            level: LogLevel.emerg,
-            format: LogFormat.json,
-        },
-        transport: {
-            stdout: stdoutStub,
-            stderr: stderrStub,
-        },
-        data: {data: 'data'},
-    };
-
-    // when
-    log(opts);
-
-    // then
-    assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
-    assert.equal(
-        stderrStub.getCalls()[0][0],
-        JSON.stringify({level: LogLevel.emerg, message: '', data: {data: 'data'}}),
-        'stderr should be called with expected data'
-    );
-
-});
-
-test('debug/debug/json/message/data', (assert) => {
-
-    // given
-    const stderrStub = stub();
-    const stdoutStub = stub();
-    const opts: mod.LogInput = {
+    log({
         level: LogLevel.debug,
         options: {
-            level: LogLevel.debug,
+            level: LogLevel.info,
             format: LogFormat.json,
         },
         transport: {
@@ -148,33 +80,27 @@ test('debug/debug/json/message/data', (assert) => {
             stderr: stderrStub,
         },
         message: 'hello world',
-        data: {data: 'data'},
-    };
+    });
 
-    // when
-    log(opts);
-
-    // then
+    assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
     assert.equal(stderrStub.getCalls().length, 0, 'stderr should not be called');
-    assert.equal(
-        stdoutStub.getCalls()[0][0],
-        JSON.stringify({level: LogLevel.debug, message: 'hello world', data: {data: 'data'}}),
-        'stdout should be called with expected data'
-    );
 
 });
 
-test('err/err/json', (assert) => {
+test('log levels <= 4 are sent to stderr', (assert) => {
 
-    // given
     const stderrStub = stub();
     const stdoutStub = stub();
+
     const fakeErr = new Error('my b');
-    const serializedErr = serializeError(fakeErr);
-    const opts: mod.LogInput = {
+
+    // replace stack with fake stack
+    fakeErr.stack = 'Error: my b\n  at foo.ts:1:1';
+
+    log({
         level: LogLevel.error,
         options: {
-            level: LogLevel.error,
+            level: LogLevel.info,
             format: LogFormat.json,
         },
         transport: {
@@ -182,45 +108,22 @@ test('err/err/json', (assert) => {
             stderr: stderrStub,
         },
         error: fakeErr,
-    };
+    });
 
-    // when
-    log(opts);
-
-    // then
     assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
     assert.equal(
         stderrStub.getCalls()[0][0],
-        JSON.stringify({level: LogLevel.error, message: 'my b', error: serializedErr}),
+        JSON.stringify({
+            level: LogLevel.error,
+            message: 'my b',
+            error: {
+                name: 'Error',
+                message: 'my b',
+                stack: ['foo.ts:1:1'],
+            },
+        }),
         'stderr should be called, message should be inferred from error, err should be serialized'
     );
-
-});
-
-test('should NOT emit logs with level higher than options.level', (assert) => {
-
-    // given
-    const stderrStub = stub();
-    const stdoutStub = stub();
-    const opts: mod.LogInput = {
-        level: LogLevel.debug,
-        options: {
-            level: LogLevel.info,
-            format: LogFormat.json,
-        },
-        transport: {
-            stdout: stdoutStub,
-            stderr: stderrStub,
-        },
-        message: 'hello world',
-    };
-
-    // when
-    log(opts);
-
-    // then
-    assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
-    assert.equal(stderrStub.getCalls().length, 0, 'stdout should not be called');
 
 });
 
@@ -239,36 +142,147 @@ test('missing inputs should throw errors', (assert) => {
 
 });
 
-test('cli format with error', (assert) => {
+test('logs with no message inherit from error object', (assert) => {
 
-    // given
     const stderrStub = stub();
     const stdoutStub = stub();
+
     const fakeErr = new Error('my b');
 
-    const input: mod.LogInput = {
+    // replace stack with fake stack
+    fakeErr.stack = 'Error: my b\n  at foo.ts:1:1';
+
+    log({
         level: LogLevel.error,
         options: {
-            level: LogLevel.error,
-            format: LogFormat.cli,
+            level: LogLevel.info,
+            format: LogFormat.json,
         },
         transport: {
             stdout: stdoutStub,
             stderr: stderrStub,
         },
         error: fakeErr,
-    };
+    });
 
-    // when
-    log(input);
-
-    // then
-    assert.equal(stdoutStub.getCalls().length, 0, 'stdout should not be called');
     assert.equal(
-        normalizeLogOutput(stderrStub.getCalls()[0][0]),
-        'Level: ERROR\n'
-        + 'Message: my b\n'
-        + 'Error: my b\n  [stack]'
+        stderrStub.getCalls()[0][0],
+        JSON.stringify({
+            level: LogLevel.error,
+            message: 'my b',
+            error: {
+                name: 'Error',
+                message: 'my b',
+                stack: ['foo.ts:1:1'],
+            },
+        })
+    );
+
+});
+
+test('logs with message retain messge given, not message from error object', (assert) => {
+
+    const stderrStub = stub();
+    const stdoutStub = stub();
+
+    const fakeErr = new Error('my b');
+
+    // replace stack with fake stack
+    fakeErr.stack = 'Error: my b\n  at foo.ts:1:1';
+
+    log({
+        level: LogLevel.error,
+        options: {
+            level: LogLevel.info,
+            format: LogFormat.json,
+        },
+        transport: {
+            stdout: stdoutStub,
+            stderr: stderrStub,
+        },
+        error: fakeErr,
+        message: 'user-supplied message',
+    });
+
+    assert.equal(
+        stderrStub.getCalls()[0][0],
+        JSON.stringify({
+            level: LogLevel.error,
+            message: 'user-supplied message',
+            error: {
+                name: 'Error',
+                message: 'my b',
+                stack: ['foo.ts:1:1'],
+            },
+        })
+    );
+
+});
+
+test('logs with no message and no error.message return empty string as message', (assert) => {
+
+    const stderrStub = stub();
+    const stdoutStub = stub();
+
+    log({
+        level: LogLevel.error,
+        options: {
+            level: LogLevel.info,
+            format: LogFormat.json,
+        },
+        transport: {
+            stdout: stdoutStub,
+            stderr: stderrStub,
+        },
+        error: {name: 'Error'},
+    });
+
+    assert.equal(
+        stderrStub.getCalls()[0][0],
+        JSON.stringify({
+            level: LogLevel.error,
+            message: '',
+            error: {
+                name: 'Error',
+            },
+        })
+    );
+
+});
+
+test('accepts objects as error, but they are not serialized as errors', (assert) => {
+
+    const stderrStub = stub();
+    const stdoutStub = stub();
+
+    log({
+        level: LogLevel.error,
+        options: {
+            level: LogLevel.info,
+            format: LogFormat.json,
+        },
+        transport: {
+            stdout: stdoutStub,
+            stderr: stderrStub,
+        },
+        error: {
+            name: 'Error',
+            message: 'my b',
+            stack: 'Error: my b\n  at foo.ts:1:1',
+        },
+    });
+
+    assert.equal(
+        stderrStub.getCalls()[0][0],
+        JSON.stringify({
+            level: LogLevel.error,
+            message: 'my b',
+            error: {
+                name: 'Error',
+                message: 'my b',
+                stack: 'Error: my b\n  at foo.ts:1:1',
+            },
+        })
     );
 
 });
