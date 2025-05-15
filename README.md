@@ -7,7 +7,7 @@
 [![build status](https://github.com/mhweiner/jsout/actions/workflows/release.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![AutoRel](https://img.shields.io/badge/AutoRel-blue)](https://github.com/mhweiner/AutoRel)
+[![AutoRel](https://img.shields.io/badge/AutoRel-1bd499)](https://github.com/mhweiner/autorel)
 
 
 A Syslog-compatible, simple, structured logging tool for Node.js projects. Sponsored by [Aeroview](https://aeroview.io).
