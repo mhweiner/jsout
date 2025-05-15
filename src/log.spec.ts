@@ -2,7 +2,7 @@
 import {test} from 'hoare';
 import {LogLevel, LogFormat} from '.';
 import {log} from './log';
-import {stub} from './lib/stub';
+import {stub} from 'cjs-mock';
 import {stripAnsiColors} from './lib/stripAnsiColors';
 
 test('logs debug to stdout in json format', (assert) => {
