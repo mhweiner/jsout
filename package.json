@@ -15,7 +15,6 @@
     "url": "git+https://github.com/mhweiner/jsout.git"
   },
   "scripts": {
-    "prepare": "npm run build",
     "test": "npm run build && c8 hoare 'src/**/*.spec.ts' && c8 report -r text -r html",
     "lint": "eslint ./ --ext .js,.ts",
     "build": "rm -rf ./dist && tsc"
