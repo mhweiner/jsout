@@ -37,12 +37,12 @@ export enum LogFormat {
 
 if (process.env.LOG && !LogLevel[process.env.LOG as keyof typeof LogLevel]) {
 
-    throw new Error('process.env.LOG must be numeric value of [2, 7], or one of the following: crit, critical, fatal, err, error, warn, warning, notice, info, debug');
+    throw new Error('process.env.LOG must be numeric value of [0, 7], or one of the following: emerg, alert, crit, critical, fatal, err, error, warn, warning, notice, info, debug');
 
 }
 
 const options: CliOptions = {
-    level: LogLevel[process.env.LOG as keyof typeof LogLevel] || LogLevel.info,
+    level: LogLevel[process.env.LOG as keyof typeof LogLevel] ?? LogLevel.info,
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
 };
 const transport = stdio; // For now, we only have stdio transport
