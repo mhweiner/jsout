@@ -1,5 +1,4 @@
 import {log} from './log';
-import {stdio} from './transports';
 
 export type CliOptions = {
     level: LogLevel
@@ -45,35 +44,34 @@ const options: CliOptions = {
     level: LogLevel[process.env.LOG as keyof typeof LogLevel] ?? LogLevel.info,
     format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
 };
-const transport = stdio; // For now, we only have stdio transport
 
 export const logger = {
     emerg: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.emerg, message, error, data, options, transport,
+        level: LogLevel.emerg, message, error, data, options,
     }),
     alert: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.alert, message, error, data, options, transport,
+        level: LogLevel.alert, message, error, data, options,
     }),
     critical: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.critical, message, error, data, options, transport,
+        level: LogLevel.critical, message, error, data, options,
     }),
     fatal: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.critical, message, error, data, options, transport,
+        level: LogLevel.critical, message, error, data, options,
     }),
     error: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.error, message, error, data, options, transport,
+        level: LogLevel.error, message, error, data, options,
     }),
     warn: (message?: string, error?: any, data?: any): void => log({
-        level: LogLevel.warn, message, error, data, options, transport,
+        level: LogLevel.warn, message, error, data, options,
     }),
     notice: (message?: string, data?: any): void => log({
-        level: LogLevel.notice, message, data, options, transport,
+        level: LogLevel.notice, message, data, options,
     }),
     info: (message?: string, data?: any): void => log({
-        level: LogLevel.info, message, data, options, transport,
+        level: LogLevel.info, message, data, options,
     }),
     debug: (message?: string, data?: any): void => log({
-        level: LogLevel.debug, message, data, options, transport,
+        level: LogLevel.debug, message, data, options,
     }),
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /**
  * Recursively extracts and serializes custom enumerable properties from an object.
  *
@@ -21,21 +22,27 @@ export function serializeCustomProps(
 
     if (seen.has(obj)) return '[Unserializable]';
     if (typeof obj === 'function') return '[Unserializable]';
+    if (currentDepth > maxDepth) return '[Unserializable]';
+    if (typeof obj === 'number' && (Number.isNaN(obj) || !Number.isFinite(obj))) return '[Unserializable]';
+
     if (typeof obj === 'bigint') return obj.toString();
     if (typeof obj === 'symbol') return obj.toString();
     if (obj === null || obj === undefined) return obj;
-    if (typeof obj === 'number' && (Number.isNaN(obj) || !Number.isFinite(obj))) return '[Unserializable]';
+
     if (typeof obj !== 'object') return obj;
-    if (currentDepth > maxDepth) return '[Unserializable]';
 
     seen.add(obj);
 
     if (Array.isArray(obj)) {
 
         try {
+
             return obj.map((item) => serializeCustomProps(item, currentDepth + 1, maxDepth, seen));
+
         } catch {
+
             return '[Unserializable]';
+
         }
 
     }

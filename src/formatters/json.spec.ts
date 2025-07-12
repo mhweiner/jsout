@@ -36,9 +36,12 @@ test('handles JSON serialization errors gracefully', (assert) => {
 
     // Create a log event with problematic data that would cause JSON.stringify to fail
     const problematicData = {};
+
     Object.defineProperty(problematicData, 'toJSON', {
         value: () => {
+
             throw new Error('JSON serialization failed');
+
         },
     });
 
@@ -52,9 +55,11 @@ test('handles JSON serialization errors gracefully', (assert) => {
 
     // Should return a safe fallback JSON string
     const parsed = JSON.parse(out);
+
     assert.equal(parsed.level, 3);
     assert.equal(parsed.message, 'Test message');
     assert.equal(parsed.data, '[Unserializable]');
+    // eslint-disable-next-line no-underscore-dangle
     assert.equal(parsed._serializationError, 'Original log data could not be serialized');
 
 });

@@ -134,8 +134,6 @@ test('missing inputs should throw errors', (assert) => {
     // @ts-ignore
     assert.throws(() => log({}), new Error('options is required'));
     // @ts-ignore
-    assert.throws(() => log({options: {}}), new Error('transport is required'));
-    // @ts-ignore
     assert.throws(() => log({options: {}, transport: {}}), new Error('transport.stdout must be a function'));
     // @ts-ignore
     assert.throws(() => log({options: {}, transport: {stdout: () => {}}}), new Error('transport.stderr must be a function'));
