@@ -21,14 +21,22 @@ export function serializeCustomProps(
 
     if (seen.has(obj)) return '[Unserializable]';
     if (typeof obj === 'function') return '[Unserializable]';
-    if (obj === null || obj === undefined || Number.isNaN(obj) || typeof obj !== 'object') return obj;
+    if (typeof obj === 'bigint') return obj.toString();
+    if (typeof obj === 'symbol') return obj.toString();
+    if (obj === null || obj === undefined) return obj;
+    if (typeof obj === 'number' && (Number.isNaN(obj) || !Number.isFinite(obj))) return '[Unserializable]';
+    if (typeof obj !== 'object') return obj;
     if (currentDepth > maxDepth) return '[Unserializable]';
 
     seen.add(obj);
 
     if (Array.isArray(obj)) {
 
-        return obj.map((item) => serializeCustomProps(item, currentDepth + 1, maxDepth, seen));
+        try {
+            return obj.map((item) => serializeCustomProps(item, currentDepth + 1, maxDepth, seen));
+        } catch {
+            return '[Unserializable]';
+        }
 
     }
 

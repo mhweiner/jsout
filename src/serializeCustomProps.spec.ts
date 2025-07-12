@@ -113,3 +113,67 @@ test('ignores properties starting with "_"', (assert) => {
 
 });
 
+test('converts BigInt values to strings', (assert) => {
+
+    const obj = {
+        id: BigInt('12345678901234567890'),
+        count: BigInt(42),
+        nested: {
+            bigId: BigInt('98765432109876543210'),
+        },
+        array: [BigInt(1), BigInt(2), BigInt(3)],
+    };
+
+    const out = serializeCustomProps(obj);
+
+    assert.equal(out.id, '12345678901234567890');
+    assert.equal(out.count, '42');
+    assert.equal(out.nested.bigId, '98765432109876543210');
+    assert.equal(out.array[0], '1');
+    assert.equal(out.array[1], '2');
+    assert.equal(out.array[2], '3');
+
+});
+
+test('handles other problematic types gracefully', (assert) => {
+
+    const obj = {
+        symbol: Symbol('test'),
+        nan: NaN,
+        infinity: Infinity,
+        negInfinity: -Infinity,
+        circular: null as any,
+    };
+
+    // Create circular reference
+    obj.circular = obj;
+
+    const out = serializeCustomProps(obj);
+
+    assert.equal(out.symbol, 'Symbol(test)');
+    assert.equal(out.nan, '[Unserializable]');
+    assert.equal(out.infinity, '[Unserializable]');
+    assert.equal(out.negInfinity, '[Unserializable]');
+    assert.equal(out.circular, '[Unserializable]');
+
+});
+
+test('handles array errors gracefully', (assert) => {
+
+    const problematicArray = [1, 2, 3];
+
+    // Make the array problematic by overriding map method
+    Object.defineProperty(problematicArray, 'map', {
+        value: () => {
+
+            throw new Error('Array map failed');
+
+        },
+    });
+
+    const out = serializeCustomProps({data: problematicArray});
+
+    assert.equal(out.data, '[Unserializable]');
+
+});
+
