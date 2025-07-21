@@ -5,6 +5,7 @@ import {portableInspect} from '../lib/portableInspect';
 import {getColorFunctions} from '../lib/colors';
 
 export function formatCli(log: LogEvent): string {
+
     const {bold, white} = getColorFunctions();
 
     const insp = (obj: any): string => portableInspect(obj, {colors: true, depth: null});
@@ -18,6 +19,7 @@ export function formatCli(log: LogEvent): string {
 }
 
 function cliFormatError(error: any): string {
+
     const {bold} = getColorFunctions();
 
     if (!error) return '';
