@@ -1,4 +1,4 @@
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {serializeCustomProps} from './serializeCustomProps';
 
 test('handles circular references safely', (assert) => {

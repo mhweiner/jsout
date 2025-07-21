@@ -1,12 +1,13 @@
 import {colorizeLevel} from '../colorizeLevel';
 import {LogEvent} from '../log';
-import util from 'node:util';
 import {formatSerializedError, isSerializedError} from './formatSerializedError';
-import {bold, white} from 'colorette';
+import {portableInspect} from '../lib/portableInspect';
+import {getColorFunctions} from '../lib/colors';
 
 export function formatCli(log: LogEvent): string {
+    const {bold, white} = getColorFunctions();
 
-    const insp = (obj: any): string => util.inspect(obj, {colors: true, depth: null});
+    const insp = (obj: any): string => portableInspect(obj, {colors: true, depth: null});
     const level = `${bold(white('Level'))}: ${colorizeLevel(log.level)}\n`;
     const message = `${bold(white(`Message: ${log.message}`))}\n`;
     const error = cliFormatError(log.error);
@@ -17,6 +18,7 @@ export function formatCli(log: LogEvent): string {
 }
 
 function cliFormatError(error: any): string {
+    const {bold} = getColorFunctions();
 
     if (!error) return '';
     if (isSerializedError(error)) {
@@ -25,7 +27,7 @@ function cliFormatError(error: any): string {
 
     } else {
 
-        return `${bold('Error')}: ${util.inspect(error, {colors: true, depth: null})}\n`;
+        return `${bold('Error')}: ${portableInspect(error, {colors: true, depth: null})}\n`;
 
     }
 

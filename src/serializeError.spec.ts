@@ -1,4 +1,4 @@
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {serializeError} from './serializeError';
 
 test('serializes a basic Error', (assert) => {

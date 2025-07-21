@@ -1,4 +1,4 @@
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {formatJson} from './json';
 import {LogEvent} from '../log';
 import {serializeError} from '../serializeError';

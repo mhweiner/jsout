@@ -1,4 +1,4 @@
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {mockLoggerFactory} from './mockLoggerFactory';
 
 test('records calls with correct level aliases', (assert) => {

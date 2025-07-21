@@ -15,7 +15,7 @@
     "url": "git+https://github.com/mhweiner/jsout.git"
   },
   "scripts": {
-    "test": "npm run build && c8 hoare 'src/**/*.spec.ts' && c8 report -r text -r html",
+    "test": "npm run build && c8 kizu 'src/**/*.spec.ts' && c8 report -r text -r html",
     "lint": "eslint ./ --ext .js,.ts",
     "build": "rm -rf ./dist && tsc"
   },
@@ -43,12 +43,9 @@
     "c8": "^10.1.2",
     "cjs-mock": "3.0.1",
     "eslint": "^8.4.1",
-    "hoare": "3.4.4",
+    "kizu": "3.8.0",
     "sinon": "^12.0.1",
     "ts-node": "10.9.2",
     "typescript": "5.8.3"
-  },
-  "dependencies": {
-    "colorette": "2.0.20"
   }
 }

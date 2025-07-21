@@ -1,11 +1,13 @@
-import util from 'node:util';
 import {SerializedError} from '..';
-import {bold, bgGreenBright, black, whiteBright, gray} from 'colorette';
+import {portableInspect} from '../lib/portableInspect';
+import {getColorFunctions} from '../lib/colors';
 
 /**
  * Formats a serialized error (from serializeError) into human-readable text.
  */
 export function formatSerializedError(err: SerializedError): string {
+
+    const {bold, bgGreenBright, black, whiteBright, gray} = getColorFunctions();
 
     const lines: string[] = [];
     let current: SerializedError | undefined = err;
@@ -28,7 +30,7 @@ export function formatSerializedError(err: SerializedError): string {
             // Skip standard fields
             if (key === 'name' || key === 'message' || key === 'stack' || key === 'cause') continue;
 
-            lines.push(`${key}: ${util.inspect(current[key], {colors: true, depth: null})}`);
+            lines.push(`${key}: ${portableInspect(current[key], {colors: true, depth: null})}`);
 
         }
 

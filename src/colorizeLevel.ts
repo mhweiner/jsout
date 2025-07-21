@@ -1,7 +1,9 @@
 import {LogLevel} from '.';
-import {bold, gray, white, yellowBright, redBright, bgRedBright} from 'colorette';
+import {getColorFunctions} from './lib/colors';
 
 export function colorizeLevel(level: LogLevel): string {
+
+    const {bold, gray, white, yellowBright, redBright, bgRedBright} = getColorFunctions();
 
     switch (level) {
 

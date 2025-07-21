@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {formatSerializedError} from './formatSerializedError';
 import {SerializedError} from '..';
 import {stripAnsiColors} from '../lib/stripAnsiColors';
