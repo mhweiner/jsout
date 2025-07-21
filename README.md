@@ -5,12 +5,12 @@
 </picture>
 
 [![build status](https://github.com/mhweiner/jsout/actions/workflows/release.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3.0+-blue.svg)](https://www.typescriptlang.org/)
 [![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 [![AutoRel](https://img.shields.io/badge/AutoRel-1bd499)](https://github.com/mhweiner/autorel)
 
-
-A Syslog-compatible, simple, structured logging tool for Node.js projects. Sponsored by [Aeroview](https://aeroview.io).
+A Syslog-compatible, simple, structured logging tool for **Node.js, Bun, Deno, and browser environments**. Sponsored by [Aeroview](https://aeroview.io).
 
 <picture>
     <source srcset="docs/error-screenshot.svg">
@@ -33,16 +33,20 @@ A Syslog-compatible, simple, structured logging tool for Node.js projects. Spons
 - Production settings by default for safety
 - Transport handled [outside of the process via `stdout` and `stderr`](#why-should-logs-use-stdout-and-stderr)
 - Easy to use and simple configuration
-- Only 1 small dependency. Fast & reliable TypeScript codebase
+- **Zero dependencies**. Fast & reliable TypeScript codebase
 - Excellent test coverage (>90%)
+
+**🌐 Universal JavaScript Support**
+- Get full CLI color support in Node.js, Bun, and Deno
+- Works great in the browser, too!
 
 ## Installation
 
 ```bash
-npm i jsout
+npm install jsout
 ```
  
-## Example Usage
+## Example Usage (Node.js)
 
 ```typescript
 import {logger} from 'jsout';
@@ -56,7 +60,7 @@ logger.error('', new Error('test')); //infers "test" as message
 
 - [Express Request Logger](https://github.com/mhweiner/jsout-express)
 
-## Configuration
+## Runtime Configuration
 
 Configuration is set through environment variables. 
 
@@ -67,6 +71,8 @@ We recommend using the following settings for local development:
 ```bash
 LOG=debug LOG_FORMAT=cli node /path/to/app.js
 ```
+
+**Note:** In browser environments, configuration is typically handled through your bundler's environment variable injection or runtime configuration.
 
 ### `LOG`
 
@@ -204,6 +210,6 @@ Logs should be emitted to `STDOUT` and `STDERR` for a few reasons:
 ## Related Projects
 
 - [autorel](https://github.com/mhweiner/autorel): Automate semantic releases based on conventional commits.
-- [hoare](https://github.com/mhweiner/hoare): A fast, defensive test runner for JS/TS.
+- [kizu](https://github.com/mhweiner/kizu): A fast, defensive test runner for JS/TS.
 - [brek](https://github.com/mhweiner/brek): Typed config loader for dynamic, secret-based configs.
 - [pgsmith](https://github.com/mhweiner/pgsmith): A SQL builder for parameterized queries in PostgreSQL.
