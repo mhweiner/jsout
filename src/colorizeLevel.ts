@@ -1,7 +1,8 @@
 import {LogLevel} from '.';
-import {getColorFunctions} from './lib/portableInspect';
+import {getColorFunctions} from './lib/colors';
 
 export function colorizeLevel(level: LogLevel): string {
+
     const {bold, gray, white, yellowBright, redBright, bgRedBright} = getColorFunctions();
 
     switch (level) {

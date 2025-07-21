@@ -1,7 +1,8 @@
 import {colorizeLevel} from '../colorizeLevel';
 import {LogEvent} from '../log';
 import {formatSerializedError, isSerializedError} from './formatSerializedError';
-import {portableInspect, getColorFunctions} from '../lib/portableInspect';
+import {portableInspect} from '../lib/portableInspect';
+import {getColorFunctions} from '../lib/colors';
 
 export function formatCli(log: LogEvent): string {
     const {bold, white} = getColorFunctions();

@@ -1,5 +1,6 @@
 import {SerializedError} from '..';
-import {portableInspect, getColorFunctions} from '../lib/portableInspect';
+import {portableInspect} from '../lib/portableInspect';
+import {getColorFunctions} from '../lib/colors';
 
 /**
  * Formats a serialized error (from serializeError) into human-readable text.
