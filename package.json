@@ -1,7 +1,7 @@
 {
   "name": "jsout",
   "version": "0.0.0-autorel",
-  "description": "A Syslog-compatible, small, and simple logger for Typescript/Javascript projects. Sponsored by https://aeroview.io",
+  "description": "A Syslog-compatible, small, and simple logger for Node.js, Bun, Deno, and browser environments. Zero dependencies. Sponsored by https://aeroview.io",
   "license": "MIT",
   "author": "Marc H. Weiner <mhweiner234@gmail.com> (https://mhweiner.com)",
   "main": "./dist/index.js",
@@ -34,7 +34,15 @@
     "roarr",
     "cli logger",
     "structured logger",
-    "structured logging"
+    "structured logging",
+    "universal",
+    "cross-platform",
+    "browser",
+    "bun",
+    "deno",
+    "nodejs",
+    "zero-dependencies",
+    "portable"
   ],
   "devDependencies": {
     "@types/node": "20.17.37",
