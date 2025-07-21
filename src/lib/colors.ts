@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 type ColorFunctions = {
     bold: (str: string) => string
     bgGreenBright: (str: string) => string
@@ -10,7 +11,7 @@ type ColorFunctions = {
     bgRedBright: (str: string) => string
 };
 
-// Simple ANSI color codes
+// Complete ANSI color codes for future extensibility
 const colors = {
     reset: '\x1b[0m',
     bold: '\x1b[1m',
@@ -37,13 +38,15 @@ const colors = {
  * Uses ANSI codes in terminal environments, no-op in non-terminal environments
  */
 export function getColorFunctions(): ColorFunctions {
+
     // Check if we're in a terminal environment that supports colors
-    const isTerminal = typeof process !== 'undefined' && 
-                      process.stdout && 
-                      process.stdout.isTTY && 
-                      process.env.TERM !== 'dumb';
+    const isTerminal = typeof process !== 'undefined'
+                      && process.stdout
+                      && process.stdout.isTTY
+                      && process.env.TERM !== 'dumb';
 
     if (isTerminal) {
+
         // Terminal environment - use ANSI colors
         return {
             bold: (str: string) => `${colors.bold}${str}${colors.reset}`,
@@ -56,9 +59,12 @@ export function getColorFunctions(): ColorFunctions {
             redBright: (str: string) => `${colors.red}${str}${colors.reset}`,
             bgRedBright: (str: string) => `${colors.bgRed}${str}${colors.reset}`,
         };
+
     } else {
+
         // Non-terminal environment (browser, etc.) - no colors
         const noop = (str: string): string => str;
+
         return {
             bold: noop,
             bgGreenBright: noop,
@@ -70,5 +76,7 @@ export function getColorFunctions(): ColorFunctions {
             redBright: noop,
             bgRedBright: noop,
         };
+
     }
+
 }
