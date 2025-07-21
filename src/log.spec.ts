@@ -1,5 +1,5 @@
 /* eslint-disable max-lines-per-function */
-import {test} from 'hoare';
+import {test} from 'kizu';
 import {LogLevel, LogFormat} from '.';
 import {log} from './log';
 import {stub} from 'cjs-mock';

@@ -42,7 +42,7 @@ if (process.env.LOG && !LogLevel[process.env.LOG as keyof typeof LogLevel]) {
 
 const options: CliOptions = {
     level: LogLevel[process.env.LOG as keyof typeof LogLevel] ?? LogLevel.info,
-    format: process.env.LOG_FORMAT === LogFormat.human ? LogFormat.human : LogFormat.json,
+    format: process.env.LOG_FORMAT === LogFormat.cli || process.env.LOG_FORMAT === LogFormat.human ? LogFormat.cli : LogFormat.json,
 };
 
 export const logger = {
