@@ -60,13 +60,6 @@ bun add jsout
 import {logger} from 'npm:jsout';
 ```
 
-### Browser
-```html
-<script type="module">
-  import {logger} from 'https://esm.sh/jsout';
-</script>
-```
-
 ## Cross-Platform Support
 
 jsout works seamlessly across all JavaScript environments:
@@ -82,14 +75,12 @@ jsout works seamlessly across all JavaScript environments:
 
 **Terminal Environments (Node.js, Bun, Deno):**
 - Full ANSI color support
-- CLI formatting with colors
+- CLI/human-readable formatting with colors
 - JSON output with proper formatting
 
 **Browser Environment:**
 - Colors gracefully degrade to plain text
-- CLI format works without colors
-- JSON format works perfectly
-- No runtime errors or missing dependencies
+- JSON or human-readable output
 
 ## Zero Dependencies
 
@@ -108,24 +99,16 @@ The library includes its own lightweight implementations of:
 
 ## Example Usage
 
-### Node.js / Bun / Deno
 ```typescript
 import {logger} from 'jsout';
 
 logger.info('test message');
 logger.fatal('oops!', new Error(), {foo: 'bar'})
 logger.error('', new Error('test')); //infers "test" as message
-```
 
-### Browser
-```typescript
-import {logger} from 'jsout';
-
-// Works exactly the same in browser!
-logger.info('User logged in', {userId: 123});
-logger.error('API call failed', new Error('Network timeout'));
-
-// Output: {"level":6,"message":"User logged in","data":{"userId":123}}
+// Output: {"level":6,"message":"test message","data":{}}
+// Output: {"level":0,"message":"oops!","data":{"foo":"bar"},"error":{"message":"Error","stack":"Error: Error\n    at Object.<anonymous> (/path/to/app.js:1:1)\n"}}
+// Output: {"level":3,"message":"test","data":{},"error":{"message":"test","stack":"Error: test\n    at Object.<anonymous> (/path/to/app.js:1:1)\n"}}
 ```
 
 ## Plugins
