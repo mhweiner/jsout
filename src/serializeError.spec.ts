@@ -124,7 +124,10 @@ test('omits internal frames and other common junk from the stack', (assert) => {
     assert.equal(out, {
         name: 'Error',
         message: 'Internal error',
-        stack: ['/src/serializeError.spec.ts:1:1'],
+        stack: [
+            'Generator.next (<anonymous>)',
+            '/src/serializeError.spec.ts:1:1',
+        ],
     });
 
 });

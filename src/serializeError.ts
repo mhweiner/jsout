@@ -42,18 +42,24 @@ function extractStack(stack: string): string[] {
 function isInternalFrame(line: string): boolean {
 
     return (
+        // Node internals
         line.includes('node:internal/')
         || line.startsWith('internal/')
         || line.includes('bootstrap_node.js')
         || line.includes('module.js')
         || line.includes('next_tick.js')
-        || line.includes('timers.js')
         || line.includes('async_hooks.js')
         || line.includes('processTicksAndRejections')
-        || line.includes('Generator.next')
+
+        // TS helper filter
+        || /^\s*at\s+__awaiter\b/.test(line)
+        || /^\s*at\s+__generator\b/.test(line)
+
+        // Specific Module internals
         || line.includes('Module._')
-        || line.includes('Object.<anonymous>')
-        || line.startsWith('__')
+
+        // Internal marker style: "__something__:line:col" with no slash
+        || /^__[^/]+:\d+:\d+/.test(line)
     );
 
 }
