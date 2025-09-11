@@ -113,7 +113,7 @@ test('log levels <= 4 are sent to stderr', (assert) => {
         stderrStub.getCalls()[0][0],
         JSON.stringify({
             level: LogLevel.error,
-            message: 'my b',
+            message: 'Error: my b',
             error: {
                 name: 'Error',
                 message: 'my b',
@@ -165,7 +165,7 @@ test('logs with no message inherit from error object', (assert) => {
         stderrStub.getCalls()[0][0],
         JSON.stringify({
             level: LogLevel.error,
-            message: 'my b',
+            message: 'Error: my b',
             error: {
                 name: 'Error',
                 message: 'my b',
@@ -215,7 +215,7 @@ test('logs with message retain messge given, not message from error object', (as
 
 });
 
-test('logs with no message and no error.message return empty string as message', (assert) => {
+test('logs with no message and no error.message return error.name as message', (assert) => {
 
     const stderrStub = stub();
     const stdoutStub = stub();
@@ -237,7 +237,7 @@ test('logs with no message and no error.message return empty string as message',
         stderrStub.getCalls()[0][0],
         JSON.stringify({
             level: LogLevel.error,
-            message: '',
+            message: 'Error',
             error: {
                 name: 'Error',
             },
@@ -272,7 +272,7 @@ test('accepts objects as error, but they are not serialized as errors', (assert)
         stderrStub.getCalls()[0][0],
         JSON.stringify({
             level: LogLevel.error,
-            message: 'my b',
+            message: 'Error: my b',
             error: {
                 name: 'Error',
                 message: 'my b',

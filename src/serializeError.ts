@@ -1,4 +1,5 @@
 import {SerializedError} from '.';
+import {commonIgnorePatterns} from './filterStackTrace';
 import {serializeCustomProps} from './serializeCustomProps';
 
 /**
@@ -35,31 +36,6 @@ function extractStack(stack: string): string[] {
         .split('\n')
         .slice(1)
         .map((line) => line.replace(/^\s*at\s+/, ''))
-        .filter((line) => !isInternalFrame(line));
-
-}
-
-function isInternalFrame(line: string): boolean {
-
-    return (
-        // Node internals
-        line.includes('node:internal/')
-        || line.startsWith('internal/')
-        || line.includes('bootstrap_node.js')
-        || line.includes('module.js')
-        || line.includes('next_tick.js')
-        || line.includes('async_hooks.js')
-        || line.includes('processTicksAndRejections')
-
-        // TS helper filter
-        || /^\s*at\s+__awaiter\b/.test(line)
-        || /^\s*at\s+__generator\b/.test(line)
-
-        // Specific Module internals
-        || line.includes('Module._')
-
-        // Internal marker style: "__something__:line:col" with no slash
-        || /^__[^/]+:\d+:\d+/.test(line)
-    );
+        .filter((line) => !commonIgnorePatterns.some((pattern) => pattern.test(line)));
 
 }
