@@ -9,12 +9,12 @@ export function formatCli(log: LogEvent): string {
     const {bold, white} = getColorFunctions();
 
     const insp = (obj: any): string => inspect(obj);
-    const level = `${bold(white('Level'))}: ${colorizeLevel(log.level)}\n`;
-    const message = `${bold(white(`Message: ${log.message}`))}\n`;
+    const level = colorizeLevel(log.level);
+    const message = `${bold(white(log.message))}`;
     const error = cliFormatError(log.error);
-    const data = log.data ? `${insp(log.data)}\n` : '';
+    const data = log.data ? insp(log.data) : '';
 
-    return `\n${level}${message}${error}${data}`;
+    return `\n[${level}] ${message}\n${error}\n${data}`;
 
 }
 
