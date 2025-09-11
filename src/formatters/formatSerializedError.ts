@@ -1,5 +1,5 @@
 import {SerializedError} from '..';
-import {portableInspect} from '../lib/portableInspect';
+import {inspect} from '../lib/inspect';
 import {getColorFunctions} from '../lib/colors';
 
 /**
@@ -30,7 +30,7 @@ export function formatSerializedError(err: SerializedError): string {
             // Skip standard fields
             if (key === 'name' || key === 'message' || key === 'stack' || key === 'cause') continue;
 
-            lines.push(`${key}: ${portableInspect(current[key], {colors: true, depth: null})}`);
+            lines.push(`${key}: ${inspect(current[key])}`);
 
         }
 

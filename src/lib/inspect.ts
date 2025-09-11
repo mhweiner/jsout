@@ -6,7 +6,7 @@ import {getColorFunctions} from './colors';
  * Works in Node.js, Bun, and browser environments
  * Always uses colors and proper formatting when supported
  */
-export function portableInspect(obj: any, currentDepth: number = 0): string {
+export function inspect(obj: any, currentDepth: number = 0): string {
 
     const colorFunctions = getColorFunctions();
 
@@ -71,7 +71,7 @@ export function portableInspect(obj: any, currentDepth: number = 0): string {
 
                 }
 
-                const items = obj.map((item) => portableInspect(item, currentDepth + 1)).join(', ');
+                const items = obj.map((item) => inspect(item, currentDepth + 1)).join(', ');
 
                 return `[ ${items} ]`;
 
@@ -89,7 +89,7 @@ export function portableInspect(obj: any, currentDepth: number = 0): string {
                 const pairs = keys.map((key) => {
 
                     const keyStr = colorFunctions.bold(key);
-                    const valueStr = portableInspect(obj[key], currentDepth + 1);
+                    const valueStr = inspect(obj[key], currentDepth + 1);
 
                     return `${keyStr}: ${valueStr}`;
 
