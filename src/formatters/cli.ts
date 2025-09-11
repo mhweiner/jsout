@@ -14,7 +14,7 @@ export function formatCli(log: LogEvent): string {
     const error = cliFormatError(log.error);
     const data = log.data ? insp(log.data) : '';
 
-    return `\n[${level}] ${message}\n${error}${data}`;
+    return `\n${level}: ${message}\n${error}${data}`;
 
 }
 
