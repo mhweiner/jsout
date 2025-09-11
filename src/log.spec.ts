@@ -57,9 +57,7 @@ test('logs json info to stdout in cli format', (assert) => {
 
     assert.equal(
         stripAnsiColors(stdoutStub.getCalls()[0][0]),
-        'Level: INFO\n'
-        + 'Message: hello world\n'
-        + '{ data: \'data\' }',
+        'Level: INFO\nMessage: hello world\n{\n  data: \'data\'\n}',
     );
 
 });

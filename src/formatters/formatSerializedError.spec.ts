@@ -43,14 +43,14 @@ test('prints custom fields on error', (assert) => {
     };
     const out = stripAnsiColors(formatSerializedError(err));
 
-    assert.equal(out, [
-        'CustomError: Ooops',
-        '  at Object.<anonymous> (/path/to/file.js:1:1)',
-        '  at Module._compile (node:internal/modules/cjs/loader:1210:14)',
-        '  at node:internal/modules/cjs/loader:1274:32',
-        'code: \'E_FAIL\'',
-        'meta: { id: 123 }',
-    ].join('\n'));
+    assert.equal(out, 'CustomError: Ooops\n'
+  + '  at Object.<anonymous> (/path/to/file.js:1:1)\n'
+  + '  at Module._compile (node:internal/modules/cjs/loader:1210:14)\n'
+  + '  at node:internal/modules/cjs/loader:1274:32\n'
+  + 'code: \'E_FAIL\'\n'
+  + 'meta: {\n'
+  + '  id: 123\n'
+  + '}');
 
 });
 

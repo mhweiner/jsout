@@ -32,18 +32,18 @@ test('formatCli: SerializedError', (assert) => {
     };
     const out = stripAnsiColors(formatCli(log));
 
-    assert.equal(out, [
-        'Level: ERROR',
-        'Message: A custom message',
-        'OuterError: Outer error',
-        '  at /app/src/foo.ts:1:1',
-        'foo: \'bar\'',
-        '↳ Caused by:',
-        'InnerError: Inner error',
-        '  at /app/src/bar.ts:1:1',
-        'innerFoo: \'innerBar\'',
-        '{ baz: \'bop\' }',
-    ].join('\n'));
+    assert.equal(out, 'Level: ERROR\n'
+  + 'Message: A custom message\n'
+  + 'OuterError: Outer error\n'
+  + '  at /app/src/foo.ts:1:1\n'
+  + 'foo: \'bar\'\n'
+  + '↳ Caused by:\n'
+  + 'InnerError: Inner error\n'
+  + '  at /app/src/bar.ts:1:1\n'
+  + 'innerFoo: \'innerBar\'\n'
+  + '{\n'
+  + '  baz: \'bop\'\n'
+  + '}');
 
 });
 
@@ -61,12 +61,15 @@ test('formatCli: POJO error', (assert) => {
     };
     const out = stripAnsiColors(formatCli(log));
 
-    assert.equal(out, [
-        'Level: ALERT',
-        'Message: A custom message',
-        'Error: { message: \'Outer error\', foo: \'bar\' }',
-        '{ baz: \'bop\' }',
-    ].join('\n'));
+    assert.equal(out, 'Level: ALERT\n'
+  + 'Message: A custom message\n'
+  + 'Error: {\n'
+  + '  message: \'Outer error\',\n'
+  + '  foo: \'bar\'\n'
+  + '}\n'
+  + '{\n'
+  + '  baz: \'bop\'\n'
+  + '}');
 
 });
 
