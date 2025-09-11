@@ -1,113 +1,45 @@
-/* eslint-disable max-lines-per-function */
-import {getColorFunctions} from './colors';
-
 /**
- * Portable inspect function that mimics util.inspect behavior
- * Works in Node.js, Bun, and browser environments
- * Always uses colors and proper formatting when supported
+ * Portable inspect function that uses Node's util.inspect when available
+ * Falls back to console.log for non-Node environments
  */
-export function inspect(obj: any, currentDepth: number = 0): string {
+export function inspect(obj: any): string {
 
-    const colorFunctions = getColorFunctions();
+    // Try to use Node's util.inspect if available
+    try {
 
-    // Simple string representation for basic types
-    if (obj === null) {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+        const util = require('util');
 
-        return colorFunctions.gray('null');
+        if (util && typeof util.inspect === 'function') {
 
-    }
-    if (obj === undefined) {
-
-        return colorFunctions.gray('undefined');
-
-    }
-    if (typeof obj === 'string') {
-
-        const quoted = `'${obj}'`;
-
-        return colorFunctions.yellowBright(quoted);
-
-    }
-    if (typeof obj === 'number') {
-
-        const numStr = String(obj);
-
-        return colorFunctions.whiteBright(numStr);
-
-    }
-    if (typeof obj === 'boolean') {
-
-        const boolStr = String(obj);
-
-        return colorFunctions.redBright(boolStr);
-
-    }
-    if (typeof obj === 'function') {
-
-        const funcStr = `[Function: ${obj.name || 'anonymous'}]`;
-
-        return colorFunctions.gray(funcStr);
-
-    }
-    if (typeof obj === 'symbol') {
-
-        const symStr = obj.toString();
-
-        return colorFunctions.gray(symStr);
-
-    }
-
-    // For objects and arrays, use a more compact format similar to util.inspect
-    if (typeof obj === 'object') {
-
-        try {
-
-            // For arrays
-            if (Array.isArray(obj)) {
-
-                if (obj.length === 0) {
-
-                    return colorFunctions.gray('[]');
-
-                }
-
-                const items = obj.map((item) => inspect(item, currentDepth + 1)).join(', ');
-
-                return `[ ${items} ]`;
-
-            } else {
-
-                // For objects
-                const keys = Object.keys(obj);
-
-                if (keys.length === 0) {
-
-                    return colorFunctions.gray('{}');
-
-                }
-
-                const pairs = keys.map((key) => {
-
-                    const keyStr = colorFunctions.bold(key);
-                    const valueStr = inspect(obj[key], currentDepth + 1);
-
-                    return `${keyStr}: ${valueStr}`;
-
-                });
-
-                return `{ ${pairs.join(', ')} }`;
-
-            }
-
-        } catch {
-
-            // Fallback for circular references or other issues
-            return colorFunctions.gray('[Object]');
+            return util.inspect(obj, {colors: true, depth: null});
 
         }
 
+    } catch {
+        // util not available, fall back to console.log
     }
 
-    return String(obj);
+    // Fallback: use console.log and capture output
+    try {
+
+        const originalLog = console.log;
+        let output = '';
+
+        console.log = (...args: any[]): void => {
+
+            output = args.map((arg) => String(arg)).join(' ');
+
+        };
+        console.log(obj);
+        console.log = originalLog;
+        return output;
+
+    } catch {
+
+        // Last resort: simple string conversion
+        return String(obj);
+
+    }
 
 }
