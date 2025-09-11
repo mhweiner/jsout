@@ -12,7 +12,7 @@ export function inspect(obj: any): string {
 
         if (util && typeof util.inspect === 'function') {
 
-            return util.inspect(obj, {colors: true, depth: null});
+            return util.inspect(obj, {colors: true, depth: null, compact: false});
 
         }
 
