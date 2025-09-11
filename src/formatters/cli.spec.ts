@@ -32,8 +32,7 @@ test('formatCli: SerializedError', (assert) => {
     };
     const out = stripAnsiColors(formatCli(log));
 
-    assert.equal(out, 'Level: ERROR\n'
-  + 'Message: A custom message\n'
+    assert.equal(out, '[ERROR] A custom message\n'
   + 'OuterError: Outer error\n'
   + '  at /app/src/foo.ts:1:1\n'
   + 'foo: \'bar\'\n'
@@ -61,15 +60,14 @@ test('formatCli: POJO error', (assert) => {
     };
     const out = stripAnsiColors(formatCli(log));
 
-    assert.equal(out, 'Level: ALERT\n'
-  + 'Message: A custom message\n'
-  + 'Error: {\n'
-  + '  message: \'Outer error\',\n'
-  + '  foo: \'bar\'\n'
-  + '}\n'
-  + '{\n'
-  + '  baz: \'bop\'\n'
-  + '}');
+    assert.equal(out, '[ALERT] A custom message\n'
+        + 'Error: {\n'
+        + '  message: \'Outer error\',\n'
+        + '  foo: \'bar\'\n'
+        + '}\n'
+        + '{\n'
+        + '  baz: \'bop\'\n'
+        + '}');
 
 });
 
@@ -90,11 +88,6 @@ test('formatCli: omits data block if no data', (assert) => {
     };
     const out = stripAnsiColors(formatCli(log));
 
-    assert.equal(out, [
-        'Level: ERROR',
-        'Message: A custom message',
-        'Error: my b',
-        '  at /app/src/foo.ts:1:1',
-    ].join('\n'));
+    assert.equal(out, '[ERROR] A custom message\nError: my b\n  at /app/src/foo.ts:1:1');
 
 });

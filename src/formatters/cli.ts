@@ -10,11 +10,11 @@ export function formatCli(log: LogEvent): string {
 
     const insp = (obj: any): string => inspect(obj);
     const level = colorizeLevel(log.level);
-    const message = `${bold(white(log.message))}`;
+    const message = bold(white(log.message));
     const error = cliFormatError(log.error);
     const data = log.data ? insp(log.data) : '';
 
-    return `\n[${level}] ${message}\n${error}\n${data}`;
+    return `\n[${level}] ${message}\n${error}${data}`;
 
 }
 
