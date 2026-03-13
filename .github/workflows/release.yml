@@ -8,8 +8,11 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    concurrency: 
-      group: deploy-${{github.ref}}
+    permissions:
+      contents: write   # create GitHub releases/tags (autorel)
+      id-token: write  # npm trusted publishing (OIDC)
+    concurrency:
+      group: release-${{github.ref}}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
@@ -18,16 +21,16 @@ jobs:
           fetch-tags: true
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
-          registry-url: "https://registry.npmjs.org"
+          node-version: 24  # npm 11+ required for trusted publishing (OIDC)
+          registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
-      - uses: actions/cache@v3
-        id: cache-node-modules
-        with:
-          path: node_modules
-          key: ${{runner.os}}-node-${{hashFiles('package-lock.json')}}
-      - run: npx autorel@^2
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm test
+      - name: Release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
-        
+        run: npx autorel@^2 --publish
