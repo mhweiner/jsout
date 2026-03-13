@@ -1,11 +1,15 @@
 export interface Transport {
-    stdout: (message: string) => void
-    stderr: (message: string) => void
+    error: (message: string) => void
+    warn: (message: string) => void
+    info: (message: string) => void
+    debug: (message: string) => void
 }
 
 export const stdio: Transport = {
 
-    stdout: console.log,
-    stderr: console.error,
+    error: console.error,
+    warn: console.warn,
+    info: console.log,
+    debug: console.debug,
 
 };

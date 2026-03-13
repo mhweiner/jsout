@@ -25,6 +25,15 @@ export type LogEvent = {
     data?: {}
 };
 
+function getTransport(transports: Transport, level: LogLevel): (msg: string) => void {
+
+    if (level <= LogLevel.error) return transports.error;
+    if (level <= LogLevel.warn) return transports.warn;
+    if (level <= LogLevel.info) return transports.info;
+    return transports.debug;
+
+}
+
 export function log(input: LogInput): void {
 
     // Validate inputs first - these should still throw
@@ -33,8 +42,10 @@ export function log(input: LogInput): void {
 
     const transports = input.transport ?? stdio;
 
-    if (!transports.stdout) throw new Error('transport.stdout must be a function');
-    if (!transports.stderr) throw new Error('transport.stderr must be a function');
+    if (!transports.error) throw new Error('transport.error must be a function');
+    if (!transports.warn) throw new Error('transport.warn must be a function');
+    if (!transports.info) throw new Error('transport.info must be a function');
+    if (!transports.debug) throw new Error('transport.debug must be a function');
 
     const {level, message, error, data, options} = input;
 
@@ -51,9 +62,7 @@ export function log(input: LogInput): void {
             data: serializeCustomProps(data),
         };
 
-        const transport = log.level <= LogLevel.warn
-            ? transports.stderr // 0-4
-            : transports.stdout; // 5-7
+        const transport = getTransport(transports, log.level);
 
         options.format === LogFormat.json
             ? transport(formatJson(log))
