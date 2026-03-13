@@ -19,6 +19,12 @@ function createTransportStubs(): {transport: Transport, stubs: Record<keyof Tran
 
 }
 
+function parseJsonOutput(stubFn: ReturnType<typeof stub>): Record<string, any> {
+
+    return JSON.parse(stubFn.getCalls()[0][0]);
+
+}
+
 test('logs debug to debug transport in json format', (assert) => {
 
     const {transport, stubs} = createTransportStubs();
@@ -34,14 +40,11 @@ test('logs debug to debug transport in json format', (assert) => {
         data: {data: 'data'},
     });
 
-    assert.equal(
-        stubs.debug.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.debug,
-            message: 'hello world',
-            data: {data: 'data'},
-        }),
-    );
+    const parsed = parseJsonOutput(stubs.debug);
+
+    assert.equal(parsed.level, 'DEBUG');
+    assert.equal(parsed.message, 'hello world');
+    assert.equal(parsed.data, {data: 'data'});
     assert.equal(stubs.error.getCalls().length, 0, 'error should not be called');
     assert.equal(stubs.warn.getCalls().length, 0, 'warn should not be called');
     assert.equal(stubs.info.getCalls().length, 0, 'info should not be called');
@@ -114,22 +117,18 @@ test('error level logs are sent to error transport', (assert) => {
         error: fakeErr,
     });
 
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.level, 'ERROR');
+    assert.equal(parsed.message, 'my b', 'message should be inferred from error');
+    assert.equal(parsed.error, {
+        name: 'Error',
+        message: 'my b',
+        stack: ['foo.ts:1:1'],
+    }, 'err should be serialized');
     assert.equal(stubs.info.getCalls().length, 0, 'info should not be called');
     assert.equal(stubs.warn.getCalls().length, 0, 'warn should not be called');
     assert.equal(stubs.debug.getCalls().length, 0, 'debug should not be called');
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.error,
-            message: 'my b',
-            error: {
-                name: 'Error',
-                message: 'my b',
-                stack: ['foo.ts:1:1'],
-            },
-        }),
-        'error should be called, message should be inferred from error, err should be serialized'
-    );
 
 });
 
@@ -147,17 +146,13 @@ test('warn level logs are sent to warn transport', (assert) => {
         message: 'warning message',
     });
 
+    const parsed = parseJsonOutput(stubs.warn);
+
+    assert.equal(parsed.level, 'WARN');
+    assert.equal(parsed.message, 'warning message');
     assert.equal(stubs.error.getCalls().length, 0, 'error should not be called');
     assert.equal(stubs.info.getCalls().length, 0, 'info should not be called');
     assert.equal(stubs.debug.getCalls().length, 0, 'debug should not be called');
-    assert.equal(
-        stubs.warn.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.warn,
-            message: 'warning message',
-        }),
-        'warn transport should receive the message'
-    );
 
 });
 
@@ -175,17 +170,13 @@ test('notice level logs are sent to info transport', (assert) => {
         message: 'notice message',
     });
 
+    const parsed = parseJsonOutput(stubs.info);
+
+    assert.equal(parsed.level, 'INFO');
+    assert.equal(parsed.message, 'notice message');
     assert.equal(stubs.error.getCalls().length, 0, 'error should not be called');
     assert.equal(stubs.warn.getCalls().length, 0, 'warn should not be called');
     assert.equal(stubs.debug.getCalls().length, 0, 'debug should not be called');
-    assert.equal(
-        stubs.info.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.notice,
-            message: 'notice message',
-        }),
-        'info transport should receive notice-level messages'
-    );
 
 });
 
@@ -203,17 +194,13 @@ test('fatal/critical level logs are sent to error transport', (assert) => {
         message: 'fatal message',
     });
 
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.level, 'FATAL');
+    assert.equal(parsed.message, 'fatal message');
     assert.equal(stubs.warn.getCalls().length, 0, 'warn should not be called');
     assert.equal(stubs.info.getCalls().length, 0, 'info should not be called');
     assert.equal(stubs.debug.getCalls().length, 0, 'debug should not be called');
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.fatal,
-            message: 'fatal message',
-        }),
-        'error transport should receive fatal-level messages'
-    );
 
 });
 
@@ -252,18 +239,14 @@ test('logs with no message inherit from error object', (assert) => {
         error: fakeErr,
     });
 
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.error,
-            message: 'my b',
-            error: {
-                name: 'Error',
-                message: 'my b',
-                stack: ['foo.ts:1:1'],
-            },
-        })
-    );
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.message, 'my b');
+    assert.equal(parsed.error, {
+        name: 'Error',
+        message: 'my b',
+        stack: ['foo.ts:1:1'],
+    });
 
 });
 
@@ -286,18 +269,14 @@ test('logs with message retain message given, not message from error object', (a
         message: 'user-supplied message',
     });
 
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.error,
-            message: 'user-supplied message',
-            error: {
-                name: 'Error',
-                message: 'my b',
-                stack: ['foo.ts:1:1'],
-            },
-        })
-    );
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.message, 'user-supplied message');
+    assert.equal(parsed.error, {
+        name: 'Error',
+        message: 'my b',
+        stack: ['foo.ts:1:1'],
+    });
 
 });
 
@@ -315,16 +294,10 @@ test('logs with no message and no error.message return empty string as message',
         error: {name: 'Error'},
     });
 
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.error,
-            message: '',
-            error: {
-                name: 'Error',
-            },
-        })
-    );
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.message, '');
+    assert.equal(parsed.error, {name: 'Error'});
 
 });
 
@@ -346,17 +319,13 @@ test('accepts objects as error, but they are not serialized as errors', (assert)
         },
     });
 
-    assert.equal(
-        stubs.error.getCalls()[0][0],
-        JSON.stringify({
-            level: LogLevel.error,
-            message: 'my b',
-            error: {
-                name: 'Error',
-                message: 'my b',
-                stack: 'Error: my b\n  at foo.ts:1:1',
-            },
-        })
-    );
+    const parsed = parseJsonOutput(stubs.error);
+
+    assert.equal(parsed.message, 'my b');
+    assert.equal(parsed.error, {
+        name: 'Error',
+        message: 'my b',
+        stack: 'Error: my b\n  at foo.ts:1:1',
+    });
 
 });
