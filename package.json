@@ -16,9 +16,10 @@
   },
   "scripts": {
     "test": "c8 kizu -f 'src/**/*.spec.ts' && c8 report -r text -r html",
-    "lint": "eslint ./ --ext .js,.ts",
+    "lint": "eslint ./ --ext .js,.ts --fix",
+    "lint:check": "eslint ./ --ext .js,.ts",
     "build": "rm -rf ./dist && tsc",
-    "validate": "npm run lint && npm run build && npm run test"
+    "validate": "npm run lint:check && npm run build && npm run test"
   },
   "homepage": "https://github.com/mhweiner/jsout",
   "keywords": [
