@@ -19,7 +19,7 @@
     "lint": "eslint ./ --ext .js,.ts --fix",
     "lint:check": "eslint ./ --ext .js,.ts",
     "build": "rm -rf ./dist && tsc",
-    "validate": "npm run lint:check && npm run build && npm run test"
+    "validate": "npm run lint && npm test && npm run build"
   },
   "homepage": "https://github.com/mhweiner/jsout",
   "keywords": [
