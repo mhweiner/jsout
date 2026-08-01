@@ -1,21 +1,26 @@
-<picture>
+<div align="center">
+  <picture>
     <source srcset="docs/jsout.svg" media="(prefers-color-scheme: dark)">
     <source srcset="docs/jsout-dark.svg" media="(prefers-color-scheme: light)">
-    <img src="docs/jsout-dark.svg" alt="Logo" style="margin: 0 0 10px" size="250">
-</picture>
+    <img src="docs/jsout-dark.svg" alt="jsout" width="250">
+  </picture>
 
-[![build status](https://github.com/mhweiner/jsout/actions/workflows/release.yml/badge.svg)](https://github.com/mhweiner/jsout/actions)
-[![TypeScript](https://img.shields.io/badge/TypeScript-3.0+-blue.svg)](https://www.typescriptlang.org/)
-[![SemVer](https://img.shields.io/badge/SemVer-2.0.0-blue)]()
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
-[![AutoRel](https://img.shields.io/badge/AutoRel-1bd499)](https://github.com/mhweiner/autorel)
+  <p>
+    <img src="https://img.shields.io/badge/TypeScript-3.0+-blue.svg" alt="TypeScript">
+    <img src="https://img.shields.io/badge/SemVer-2.0.0-blue" alt="SemVer">
+    <img src="https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg" alt="Conventional Commits">
+    <a href="https://github.com/mhweiner/autorel"><img src="https://img.shields.io/badge/%F0%9F%9A%80%20AutoRel-2D4DDE" alt="AutoRel"></a>
+  </p>
 
-A Syslog-compatible, simple, structured logging tool for **Node.js, Bun, Deno, and browser environments**. Sponsored by [Aeroview](https://aeroview.io).
+  <p>A Syslog-compatible, simple, structured logging tool for <strong>Node.js, Bun, Deno, and browser environments</strong>.</p>
 
-<picture>
-    <source srcset="docs/error-screenshot.svg">
-    <img src="docs/error-screenshot.svg" alt="Screenshot of error">
-</picture>
+  <p>
+    <picture>
+      <source srcset="docs/error-screenshot.svg">
+      <img src="docs/error-screenshot.svg" alt="Screenshot of error">
+    </picture>
+  </p>
+</div>
 
 ## Features
 
@@ -26,7 +31,7 @@ A Syslog-compatible, simple, structured logging tool for **Node.js, Bun, Deno, a
 - Supports [`Error.cause`](https://medium.com/ovrsea/power-up-your-node-js-debugging-and-error-handling-with-the-new-error-cause-feature-4136c563126a) for error chaining/traces across layers of your application
 
 **🔒 Syslog Compatible Structured Logs**
-- JSON output for log aggregation into services like [Aeroview](https://aeroview.io) and [CloudWatch](https://aws.amazon.com/cloudwatch/)
+- JSON output for log aggregation into services like [CloudWatch](https://aws.amazon.com/cloudwatch/)
 - Standardized [Syslog](https://datatracker.ietf.org/doc/html/rfc5424) log levels and output
 
 **🛡 Defensive & DevOps Friendly**

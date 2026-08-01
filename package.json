@@ -1,7 +1,7 @@
 {
   "name": "jsout",
   "version": "0.0.0-autorel",
-  "description": "A Syslog-compatible, small, and simple logger for Typescript/Javascript projects. Sponsored by https://aeroview.io",
+  "description": "A Syslog-compatible, small, and simple logger for Typescript/Javascript projects.",
   "license": "MIT",
   "author": "Marc H. Weiner <mhweiner234@gmail.com> (https://mhweiner.com)",
   "main": "./dist/index.js",
